@@ -175,7 +175,7 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 				SetStatus ( WP_READY );
 			}
 		
-			PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
+			PlayCycle( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 		
 		case STAGE_WAIT:			
@@ -234,7 +234,7 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 				Attack ( false, 1, spread, 0, 1.0f );
 			}
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
+			PlayAnim(ANIMCHANNEL_ALL, "raise", parms.blendFrames);
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:		
@@ -273,7 +273,7 @@ stateResult_t rvWeaponMachinegun::State_Reload ( const stateParms_t& parms ) {
 			}
 			
 			SetStatus ( WP_RELOAD );
-			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
+			PlayAnim ( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 			
 		case STAGE_WAIT:
@@ -306,7 +306,7 @@ stateResult_t rvWeaponMachinegun::State_Flashlight ( const stateParms_t& parms )
 		case FLASHLIGHT_INIT:			
 			SetStatus ( WP_FLASHLIGHT );
 			// Wait for the flashlight anim to play		
-			PlayAnim( ANIMCHANNEL_ALL, "flashlight", 0 );
+			PlayAnim( ANIMCHANNEL_ALL, "lower", 0 );
 			return SRESULT_STAGE ( FLASHLIGHT_WAIT );
 			
 		case FLASHLIGHT_WAIT:
