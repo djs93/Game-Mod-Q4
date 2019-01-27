@@ -306,7 +306,7 @@ stateResult_t rvWeaponMachinegun::State_Flashlight ( const stateParms_t& parms )
 		case FLASHLIGHT_INIT:			
 			SetStatus ( WP_FLASHLIGHT );
 			// Wait for the flashlight anim to play		
-			PlayAnim( ANIMCHANNEL_ALL, "lower", 0 );
+			PlayAnim( ANIMCHANNEL_ALL, "flashlight", 0 );
 			return SRESULT_STAGE ( FLASHLIGHT_WAIT );
 			
 		case FLASHLIGHT_WAIT:
