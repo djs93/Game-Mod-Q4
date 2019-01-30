@@ -92,7 +92,7 @@ entityDef weapon_machinegun
 	"inv_icon"					"gfx/guis/hud/icons/item_machinegun.tga"
 	"inv_name"					"#str_107406"
 
-	"fireRate"					".01"
+	"fireRate"					".1"
 	"spread"					"1"
 
 	"mtr_crosshair"				"gfx/guis/crosshairs/crosshair_machinegun"
