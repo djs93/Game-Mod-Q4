@@ -87,21 +87,21 @@ entityDef weapon_machinegun
 	"joint_world_flash"			"muzzle_flash"
 
 	"inv_weapon"				"weapon_machinegun"
-	"inv_start_ammo_machinegun"		"40"
+	"inv_start_ammo_machinegun"		"400"
 	"inv_item"					"1"
 	"inv_icon"					"gfx/guis/hud/icons/item_machinegun.tga"
 	"inv_name"					"#str_107406"
 
-	"fireRate"					".1"
-	"spread"					"2"
+	"fireRate"					".01"
+	"spread"					"1"
 
 	"mtr_crosshair"				"gfx/guis/crosshairs/crosshair_machinegun"
 	"def_hitscan"				"hitscan_bullet"
 	"def_althitscan"			"hitscan_zoomed_bullet"
 	
 	"ammoType"					"ammo_machinegun"
-	"ammoRequired"				"1"
-	"clipSize"					"40"
+	"ammoRequired"				"0"
+	"clipSize"					"400"
 	"lowAmmo"					"10"
 	"gui"						"guis/weapons/machinegun_ammo.gui"
 	"gui2"						"guis/weapons/machinegun_inview_scope.gui"
@@ -129,7 +129,7 @@ entityDef weapon_machinegun
 	// ---------------------------- Muzzleflash ---------------------------------------
 
 	"mtr_flashShader"			"lights/muzzleflash"
-	"flashColor"				"1 0.8 0.4"
+	"flashColor"				".37 1 .68"
 	"flashRadius"				"200"
 	"flashPointLight"			"1"
 	"flashTime"					".1"
@@ -138,7 +138,7 @@ entityDef weapon_machinegun
 	// ---------------------------- Flashlight ---------------------------------------
 	
 	"mtr_flashlightShader"		"gfx/lights/flashlight"
-	"flashlightColor"			"1 1 .9"
+	"flashlightColor"			".37 1 .68"
 	"flashlightRadius"			"400"
 	"flashlightAngle"			"15.0"
 	"flashlightTarget"			"900 0 0"
