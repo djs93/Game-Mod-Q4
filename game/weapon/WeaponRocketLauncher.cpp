@@ -146,6 +146,16 @@ void rvWeaponRocketLauncher::Think ( void ) {
 	// Let the real weapon think first
 	rvWeapon::Think ( );
 
+	for (i = guideEnts.Num() - 1; i >= 0; i--) {
+		idGuidedProjectile* proj = static_cast<idGuidedProjectile*>(guideEnts[i].GetEntity());
+		if (!proj || proj->IsHidden()) {
+			guideEnts.RemoveIndex(i);
+			continue;
+		}
+		rvRandom rand = rvRandom();
+		idAngles angles = idAngles(rand.flrand(0, 360), rand.flrand(0, 360), rand.flrand(0, 360));
+		proj->SetAngles(angles);
+	}
 	// IF no guide range is set then we dont have the mod yet	
 	if ( !guideRange ) {
 		return;
