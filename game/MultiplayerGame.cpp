@@ -354,7 +354,7 @@ void idMultiplayerGame::Clear() {
 	pureReady = false;
 	scoreBoard = NULL;
 	buyMenu = NULL;
-	isBuyingAllowedRightNow = false;
+	isBuyingAllowedRightNow = true;
 	statSummary = NULL;
 	mainGui = NULL;
 	msgmodeGui = NULL;
@@ -9069,8 +9069,10 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	if ( currentMenu == 4 )
 		return; // Already open
 
+	common->Printf("Attempt to open buy menu");
+	nextMenu = 4;
 	gameLocal.sessionCommand = "game_startmenu";
-	gameLocal.mpGame.nextMenu = 4;
+	//gameLocal.mpGame.nextMenu = 4;
 }
 
 /*	
@@ -9118,7 +9120,8 @@ idMultiplayerGame::IsBuyingAllowedInTheCurrentGameMode
 */
 bool idMultiplayerGame::IsBuyingAllowedInTheCurrentGameMode( void ) {
 	if ( !gameLocal.isMultiplayer ) {
-		return false;
+		//return false;
+		return true;
 	}
 
 	if ( gameLocal.gameType != GAME_TOURNEY ) {
@@ -9136,7 +9139,8 @@ idMultiplayerGame::IsBuyingAllowedRightNow
 */
 bool idMultiplayerGame::IsBuyingAllowedRightNow( void )
 {
-	return ( IsBuyingAllowedInTheCurrentGameMode() && isBuyingAllowedRightNow );
+	//return ( IsBuyingAllowedInTheCurrentGameMode() && isBuyingAllowedRightNow );
+	return true;
 }
 
 

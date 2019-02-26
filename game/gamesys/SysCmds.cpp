@@ -905,7 +905,7 @@ static void Cmd_Say( bool team, const idCmdArgs &args ) {
 // RAVEN BEGIN
 // mekberg: activate the mphud gui so the time is right before receiving the chat message
 			if ( player->mphud ) {
-				player->mphud->Activate( true, gameLocal.time );
+				player->mphud->Activate(true, gameLocal.time);
 			}
 		}
 // RAVEN END
