@@ -340,6 +340,7 @@ public:
 
  	idUserInterface *		hud;				// Common hud
 	idUserInterface *		mphud;				// hud overlay containing MP elements
+	idUserInterface *		buygui;				// hud overlay containing MP elements
 	
 	idUserInterface *		objectiveSystem;
 	idUserInterface *		cinematicHud;

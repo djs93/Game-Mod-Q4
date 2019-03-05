@@ -1106,6 +1106,7 @@ idPlayer::idPlayer() {
 
 	hud						= NULL;
 	mphud					= NULL;
+	buygui					= NULL;
 	objectiveSystem			= NULL;
 	objectiveSystemOpen		= false;
 	showNewObjectives		= false;
@@ -1130,8 +1131,8 @@ idPlayer::idPlayer() {
 // squirrel: added DeadZone multiplayer mode
 	allowedToRespawn		= true;
 // squirrel: Mode-agnostic buymenus
-	inBuyZone				= false;
-	inBuyZonePrev			= false;
+	inBuyZone				= true;
+	inBuyZonePrev			= true;
 // RITUAL END
 	spectating				= false;
 	spectator				= 0;
@@ -14007,8 +14008,10 @@ void idPlayer::GiveCash( float cashDeltaAmount )
 	//int minCash = gameLocal.mpGame.mpBuyingManager.GetIntValueForKey( "playerMinCash", 0 );
 	//int maxCash = gameLocal.mpGame.mpBuyingManager.GetIntValueForKey( "playerMaxCash", 0 );
 	float minCash = (float) gameLocal.serverInfo.GetInt("si_buyModeMinCredits");
-	float maxCash = (float) gameLocal.serverInfo.GetInt("si_buyModeMaxCredits");
+	//float maxCash = (float) gameLocal.serverInfo.GetInt("si_buyModeMaxCredits");
+	float maxCash = 100000.0f; //TEMPORARY
 
+	common->Printf("max cash: %d \n", maxCash);
 	float oldCash = buyMenuCash;
 	buyMenuCash += cashDeltaAmount;
 	ClampCash( minCash, maxCash );
