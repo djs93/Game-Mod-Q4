@@ -427,31 +427,37 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				common->Printf(player->CanBuy() ? "Can Buy " : "Cannot Buy ");
-				gameLocal.mpGame.OpenLocalBuyMenu();
-				idUserInterface* buyMenu = uiManager->FindGui("guis/buymenu.gui", true, false, true);
-				buyMenu->SetStateString("field_credits", "$0.00");
-				buyMenu->SetStateBool("gameDraw", true);
-				common->Printf(buyMenu ? "Buy hud exists " : "Buy hud does not exist ");
-				player->GiveCash(1000.0); 
-				buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
-				buyMenu->Activate(true, gameLocal.time);
-				buyMenu->Redraw(gameLocal.time);
-
+				//common->Printf(player->CanBuy() ? "Can Buy " : "Cannot Buy ");
+				//gameLocal.mpGame.OpenLocalBuyMenu();
+				//idUserInterface* buyMenu = uiManager->FindGui("guis/buymenu.gui", true, false, true);
+				//buyMenu->SetStateString("field_credits", "$0.00");
+				//buyMenu->SetStateBool("gameDraw", true);
+				//common->Printf(buyMenu ? "Buy hud exists " : "Buy hud does not exist ");
+				//player->GiveCash(1000.0); 
+				//buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
+				//buyMenu->Activate(true, gameLocal.time);
+				//buyMenu->Redraw(gameLocal.time);
+				
+				//gameLocal.mpGame.SetCurrentMenu(4);
+				//gameLocal.mpGame.StartMenu();
+				
 				Attack ( true, 1, spread, 0, 1.0f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
-				common->Printf(player->CanBuy() ? "Can Buy " : "Cannot Buy ");
-				gameLocal.mpGame.OpenLocalBuyMenu();
-				idUserInterface* buyMenu = uiManager->FindGui("guis/buymenu.gui", true, false, true);
-				buyMenu->SetStateString("field_credits", "$0.00");
-				buyMenu->SetStateBool("gameDraw", true);
-				common->Printf(buyMenu ? "Buy hud exists " : "Buy hud does not exist ");
-				player->GiveCash(1000.0);
-				buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
-				buyMenu->Activate(true, gameLocal.time);
-				buyMenu->Redraw(gameLocal.time);
+				//common->Printf(player->CanBuy() ? "Can Buy " : "Cannot Buy ");
+				//gameLocal.mpGame.OpenLocalBuyMenu();
+				//idUserInterface* buyMenu = uiManager->FindGui("guis/buymenu.gui", true, false, true);
+				//buyMenu->SetStateString("field_credits", "$0.00");
+				//buyMenu->SetStateBool("gameDraw", true);
+				//common->Printf(buyMenu ? "Buy hud exists " : "Buy hud does not exist ");
+				//player->GiveCash(1000.0); 
+				//buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
+				//buyMenu->Activate(true, gameLocal.time);
+				//buyMenu->Redraw(gameLocal.time);
+				
+				//gameLocal.mpGame.SetCurrentMenu(4);
+				//gameLocal.mpGame.StartMenu();
 
 				Attack ( false, 1, spread, 0, 1.0f );
 				PlayEffect ( "fx_normalflash", barrelJointView, false );

@@ -3967,9 +3967,9 @@ idGameLocal::StartMenu
 ================
 */
 idUserInterface* idGameLocal::StartMenu( void ) {
-	if ( !isMultiplayer ) {
-		return NULL;
-	}
+	//if ( !isMultiplayer ) {
+	//	return NULL;
+	//}
 	return mpGame.StartMenu();
 }
 

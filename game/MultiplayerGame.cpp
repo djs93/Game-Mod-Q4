@@ -151,6 +151,7 @@ void idMultiplayerGame::Reset() {
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
 	buyMenu = uiManager->FindGui( "guis/buymenu.gui", true, false, true );
+	common->Printf("Reloaded buyMenu");
 	buyMenu->SetStateString( "field_credits", "$0.00");
 	buyMenu->SetStateBool( "gameDraw", true );
 // RITUAL END
@@ -3536,6 +3537,7 @@ idUserInterface* idMultiplayerGame::StartMenu( void ) {
 	} else {
 		if ( nextMenu >= 2 ) {
 			currentMenu = nextMenu;
+			common->Printf("Set currentMenu to %i\n", currentMenu);
 		} else {
 			// for default and explicit
 			currentMenu = 1;
@@ -3713,6 +3715,7 @@ idUserInterface* idMultiplayerGame::StartMenu( void ) {
 // squirrel: Mode-agnostic buymenus
 	} else if ( currentMenu == 4 ) {
 		//if( mpClientGameState.gameState.currentState == COUNTDOWN ) {
+		common->Printf("Setting up buy menu in StartMenu()\n");
 			idPlayer* player = gameLocal.GetLocalPlayer();
 			buyMenu->SetStateString( "field_credits", va("%i", (int)player->buyMenuCash) );
 			buyMenu->SetStateInt( "price_shotgun", player->GetItemCost("weapon_shotgun") );
@@ -9069,10 +9072,14 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	if ( currentMenu == 4 )
 		return; // Already open
 
-	common->Printf("Attempt to open buy menu");
-	nextMenu = 4;
-	gameLocal.sessionCommand = "game_startmenu";
+	//common->Printf("Attempt to open buy menu");
+	//nextMenu = 4;
+	//gameLocal.sessionCommand = "game_startmenu";
 	//gameLocal.mpGame.nextMenu = 4;
+	nextMenu = 4;
+	common->Printf("currentMenu before StartMenu() call: %i\n", currentMenu);
+	gameLocal.mpGame.StartMenu();
+	common->Printf("currentMenu after StartMenu() call: %i\n", currentMenu);
 }
 
 /*	

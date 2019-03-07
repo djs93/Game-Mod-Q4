@@ -267,6 +267,7 @@ class idMultiplayerGame {
 public:
 
 					idMultiplayerGame();
+	int				currentMenu;			// 0 - none, 1 - mainGui, 2 - msgmodeGui
 
 	void			Shutdown( void );
 
@@ -617,6 +618,7 @@ public:
 	idPlayer *		FragLeader( void );
 	bool			TimeLimitHit( void );
 	int				GetCurrentMenu( void ) { return currentMenu; }
+	void			SetCurrentMenu(int menuNum) { currentMenu = menuNum; }
 
 	void			SetFlagEntity( idEntity* ent, int team );
 	idEntity*		GetFlagEntity( int team );
@@ -703,7 +705,7 @@ private:
 	idUserInterface *mainGui;				// ready / nick / votes etc.
 	idListGUI		*mapList;
 	idUserInterface *msgmodeGui;			// message mode
-	int				currentMenu;			// 0 - none, 1 - mainGui, 2 - msgmodeGui
+
 	int				nextMenu;				// if 0, will do mainGui
 	bool			bCurrentMenuMsg;		// send menu state updates to server
 
