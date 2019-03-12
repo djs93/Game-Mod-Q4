@@ -3738,6 +3738,10 @@ idUserInterface* idMultiplayerGame::StartMenu( void ) {
 			buyMenu->SetStateInt( "price_special2", player->GetItemCost( "damage_boost" ) );
 			SetupBuyMenuItems();
 			buyMenu->Activate(true, gameLocal.time);
+			idUserInterface *testMenu = uiManager->FindGui("guis/takenotes.gui", true, false, true);
+			common->Printf("Loaded takenotes\n");
+			testMenu->SetStateBool("gameDraw", true);
+			testMenu->Activate(true, gameLocal.time);
 			return buyMenu;
 		//}
 // RITUAL END
@@ -9080,6 +9084,7 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	nextMenu = 4;
 	common->Printf("currentMenu before StartMenu() call: %i\n", currentMenu);
 	gameLocal.mpGame.StartMenu();
+	gameLocal.sessionCommand = "game_startmenu";
 	common->Printf("currentMenu after StartMenu() call: %i\n", currentMenu);
 }
 
