@@ -19,6 +19,7 @@ const char *idMultiplayerGame::MPGuis[] = {
 	"guis/mpmsgmode.gui",
 	"guis/netmenu.gui",
 	"guis/mphud.gui",
+	"guis/buymenu.gui",
 	NULL
 };
 
