@@ -3738,10 +3738,10 @@ idUserInterface* idMultiplayerGame::StartMenu( void ) {
 			buyMenu->SetStateInt( "price_special2", player->GetItemCost( "damage_boost" ) );
 			SetupBuyMenuItems();
 			buyMenu->Activate(true, gameLocal.time);
-			idUserInterface *testMenu = uiManager->FindGui("guis/takenotes.gui", true, false, true);
-			common->Printf("Loaded takenotes\n");
-			testMenu->SetStateBool("gameDraw", true);
-			testMenu->Activate(true, gameLocal.time);
+			//idUserInterface *testMenu = uiManager->FindGui("guis/takenotes.gui", true, false, true);
+			//common->Printf("Loaded takenotes\n");
+			//testMenu->SetStateBool("gameDraw", true);
+			//testMenu->Activate(true, gameLocal.time);
 			return buyMenu;
 		//}
 // RITUAL END
@@ -3756,6 +3756,7 @@ idMultiplayerGame::DisableMenu
 ================
 */
 void idMultiplayerGame::DisableMenu( void ) {
+	gameLocal.Printf("DisableMenu() called with currentMenu of %i\n", currentMenu);
 	if ( currentMenu == 1 ) {
 		mainGui->Activate( false, gameLocal.time );
 	} else if ( currentMenu == 2 ) {
@@ -3993,6 +3994,7 @@ const char* idMultiplayerGame::HandleGuiCommands( const char *_menuCommand ) {
 			cmdSystem->BufferCommandText( CMD_EXEC_APPEND, "disconnect\n" );
 			return NULL;
 		} else if (	!idStr::Icmp( cmd, "close" ) ) {
+			common->Printf("Got to processing close gui command\n");
 			DisableMenu( );
 			return NULL;
 		} else if (	!idStr::Icmp( cmd, "spectate" )	) {

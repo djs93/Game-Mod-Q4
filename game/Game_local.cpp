@@ -4014,6 +4014,7 @@ idGameLocal::HandleGuiCommands
 ================
 */
 const char* idGameLocal::HandleGuiCommands( const char *menuCommand ) {
+	common->Printf("HandleGuiCommands(%s) in Game_local.cpp\n", menuCommand);
 	if ( !isMultiplayer ) {
 		return NULL;
 	}
