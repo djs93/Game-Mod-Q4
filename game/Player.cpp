@@ -8250,48 +8250,57 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	}
 	else if( itemNameStr == "item_armor_small" )
 	{
-		if( inventory.armor >= 190 )
+		if (inventory.armor >= 190){
 			common->Printf("In ItemBuyStatus, already have small armor\n");
 			return IBS_ALREADY_HAVE;
+		}
 
-		if( inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT )
+		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT){
 			common->Printf("In ItemBuyStatus, already have small armor2\n");
 			return IBS_ALREADY_HAVE;
+		}
 
-		if( PowerUpActive( POWERUP_SCOUT ) )
+		if (PowerUpActive(POWERUP_SCOUT)){
 			common->Printf("In ItemBuyStatus, not allowed small armor\n");
 			return IBS_NOT_ALLOWED;
+		}
 	}
 	else if( itemNameStr == "item_armor_large" )
 	{
-		if( inventory.armor >= 190 )
+		if (inventory.armor >= 190){
 			common->Printf("In ItemBuyStatus, already have large armor\n");
 			return IBS_ALREADY_HAVE;
+		}
 
-		if( inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY )
+		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY){
 			common->Printf("In ItemBuyStatus, already have large armor (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
+		}
 
-		if( PowerUpActive( POWERUP_SCOUT ) )
+		if (PowerUpActive(POWERUP_SCOUT)){
 			common->Printf("In ItemBuyStatus, not allowed large armore\n");
 			return IBS_NOT_ALLOWED;
+		}
 	}
 	else if( itemNameStr == "ammorefill" )
 	{
-		if( inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO )
+		if (inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO){
 			common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
+		}
 
 		// If we are full of ammo for all weapons, you can't buy the ammo refill anymore.
 		bool fullAmmo = true;
 		for ( int i = 0 ; i < MAX_AMMOTYPES; i++ )
 		{
-			if ( inventory.ammo[i] != inventory.MaxAmmoForAmmoClass( this, rvWeapon::GetAmmoNameForIndex(i) ) )
+			if (inventory.ammo[i] != inventory.MaxAmmoForAmmoClass(this, rvWeapon::GetAmmoNameForIndex(i))){
 				fullAmmo = false;
+			}
 		}
-		if ( fullAmmo )
+		if (fullAmmo){
 			common->Printf("In ItemBuyStatus, return not allowed (b/c full ammo)\n");
 			return IBS_NOT_ALLOWED;
+		}
 	}
 	else if ( itemNameStr == "fc_armor_regen" )
 	{
@@ -8300,15 +8309,18 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	}
 
 	if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
-		if ( itemNameStr == "ammo_regen" )
+		if (itemNameStr == "ammo_regen"){
 			common->Printf("In ItemBuyStatus, not allowed ammo regen\n");
 			return IBS_NOT_ALLOWED;
-		if ( itemNameStr == "health_regen" )
+		}
+		if (itemNameStr == "health_regen"){
 			common->Printf("In ItemBuyStatus, not allowed health regen\n");
 			return IBS_NOT_ALLOWED;
-		if ( itemNameStr == "damage_boost" )
+		}
+		if (itemNameStr == "damage_boost"){
 			common->Printf("In ItemBuyStatus, not allowed damage boost\n");
 			return IBS_NOT_ALLOWED;
+		}
 	}
 
 	if (CanSelectWeapon(itemName) != -1){
