@@ -8257,65 +8257,69 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	}
 	else if( itemNameStr == "item_armor_small" )
 	{
-		if (inventory.armor >= 190){
+		return IBS_NOT_ALLOWED;//Don't want armor to function
+		//if (inventory.armor >= 190){
 			//common->Printf("In ItemBuyStatus, already have small armor\n");
-			return IBS_ALREADY_HAVE;
-		}
+		//	return IBS_ALREADY_HAVE;
+		//}
 
-		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT){
+		//if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT){
 			//common->Printf("In ItemBuyStatus, already have small armor2\n");
-			return IBS_ALREADY_HAVE;
-		}
+		//	return IBS_ALREADY_HAVE;
+		//}
 
-		if (PowerUpActive(POWERUP_SCOUT)){
+		//if (PowerUpActive(POWERUP_SCOUT)){
 			//common->Printf("In ItemBuyStatus, not allowed small armor\n");
-			return IBS_NOT_ALLOWED;
-		}
+		//	return IBS_NOT_ALLOWED;
+		//}
 	}
 	else if( itemNameStr == "item_armor_large" )
 	{
-		if (inventory.armor >= 190){
+		return IBS_NOT_ALLOWED;//Don't want armor to function
+		//if (inventory.armor >= 190){
 			//common->Printf("In ItemBuyStatus, already have large armor\n");
-			return IBS_ALREADY_HAVE;
-		}
+		//	return IBS_ALREADY_HAVE;
+		//}
 
-		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY){
+		//if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY){
 			//common->Printf("In ItemBuyStatus, already have large armor (carryOverWeapons)\n");
-			return IBS_ALREADY_HAVE;
-		}
+		//	return IBS_ALREADY_HAVE;
+		//}
 
-		if (PowerUpActive(POWERUP_SCOUT)){
+		//if (PowerUpActive(POWERUP_SCOUT)){
 			//common->Printf("In ItemBuyStatus, not allowed large armore\n");
-			return IBS_NOT_ALLOWED;
-		}
+		//	return IBS_NOT_ALLOWED;
+		//}
 	}
 	else if( itemNameStr == "ammorefill" )
 	{
-		if (inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO){
+		return IBS_NOT_ALLOWED;//Don't want ammo refill to function
+		//if (inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO){
 			//common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
-			return IBS_ALREADY_HAVE;
-		}
+		//	return IBS_ALREADY_HAVE;
+		//}
 
 		// If we are full of ammo for all weapons, you can't buy the ammo refill anymore.
-		bool fullAmmo = true;
-		for ( int i = 0 ; i < MAX_AMMOTYPES; i++ )
-		{
-			if (inventory.ammo[i] != inventory.MaxAmmoForAmmoClass(this, rvWeapon::GetAmmoNameForIndex(i))){
-				fullAmmo = false;
-			}
-		}
-		if (fullAmmo){
+		//bool fullAmmo = true;
+		//for ( int i = 0 ; i < MAX_AMMOTYPES; i++ )
+		//{
+		//	if (inventory.ammo[i] != inventory.MaxAmmoForAmmoClass(this, rvWeapon::GetAmmoNameForIndex(i))){
+		//		fullAmmo = false;
+		//	}
+		//}
+		//if (fullAmmo){
 			//common->Printf("In ItemBuyStatus, return not allowed (b/c full ammo)\n");
-			return IBS_NOT_ALLOWED;
-		}
+		//	return IBS_NOT_ALLOWED;
+		//}
 	}
 	else if ( itemNameStr == "fc_armor_regen" )
 	{
 		//common->Printf("In ItemBuyStatus, not allowed fc_ammo_regen\n");
-		return IBS_NOT_ALLOWED;
+		return IBS_NOT_ALLOWED;//not allowed by default
 	}
 
-	if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
+	//don't want any of these to function
+	//if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
 		if (itemNameStr == "ammo_regen"){
 			//common->Printf("In ItemBuyStatus, not allowed ammo regen\n");
 			return IBS_NOT_ALLOWED;
@@ -8328,13 +8332,22 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 			//common->Printf("In ItemBuyStatus, not allowed damage boost\n");
 			return IBS_NOT_ALLOWED;
 		}
-	}
+	//}
 
 	if (CanSelectWeapon(itemName) != -1){
 		//common->Printf("Already have %s\n", itemName);
 		return IBS_ALREADY_HAVE; //Is returning this for all weapons and not printing anything before it. Figure out why please future Dale uwu
 	}//I SWEAR TO CHEESUS, RAVEN FORGOT THE BRACES ON THIS IF STATEMENT AND THAT'S WHY IT WAS RETURNING BUT NOT PRINTING. AAAAAAAA. (good job future Dale)
 
+	if (idStr::Cmp("weapon_napalmgun", itemName) == 0){
+		return IBS_NOT_ALLOWED;//Don't want napalm gun to function
+	}
+	else if (idStr::Cmp("weapon_rocketlauncher", itemName) == 0){
+		return IBS_NOT_ALLOWED;//Don't want rocket launcher to function
+	}
+	else if (idStr::Cmp("weapon_railgun", itemName) == 0){
+		return IBS_NOT_ALLOWED;//Don't want railgun to function
+	}
 	int cost = GetItemCost(itemName);
 	if ( cost > (int)buyMenuCash )
 	{
@@ -14117,7 +14130,8 @@ void idPlayer::ResetCash()
 
 	float minCash = (float) gameLocal.serverInfo.GetInt("si_buyModeMinCredits");
 	float maxCash = (float) gameLocal.serverInfo.GetInt("si_buyModeMaxCredits");
-	buyMenuCash = (float) gameLocal.serverInfo.GetInt("si_buyModeStartingCredits");
+	//buyMenuCash = (float) gameLocal.serverInfo.GetInt("si_buyModeStartingCredits");
+	buyMenuCash = 0; //Fix starting cash to 0
 	ClampCash( minCash, maxCash );
 }
 

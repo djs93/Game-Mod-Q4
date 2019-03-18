@@ -885,14 +885,14 @@ windowDef Desktop
 		set "buyButtonFunctionality_grenadelauncher::visible" "1" ;	
 		set "buyButtonVisuals_lightninggun::visible" "1" ;
 		set "buyButtonFunctionality_lightninggun::visible" "1" ;			
-		set "buyButtonVisuals_napalmgun::visible" "1" ;
-		set "buyButtonFunctionality_napalmgun::visible" "1" ;			
-		set "buyButtonVisuals_rocketlauncher::visible" "1" ;
-		set "buyButtonFunctionality_rocketlauncher::visible" "1" ;			
-		set "buyButtonVisuals_railgun::visible" "1" ;
-		set "buyButtonFunctionality_railgun::visible" "1" ;	
-		set "buyButtonVisuals_dmg::visible" "1" ;
-		set "buyButtonFunctionality_dmg::visible" "1" ;		
+		//set "buyButtonVisuals_napalmgun::visible" "1" ;
+		//set "buyButtonFunctionality_napalmgun::visible" "1" ;			
+		//set "buyButtonVisuals_rocketlauncher::visible" "1" ;
+		//set "buyButtonFunctionality_rocketlauncher::visible" "1" ;			
+		//set "buyButtonVisuals_railgun::visible" "1" ;
+		//set "buyButtonFunctionality_railgun::visible" "1" ;	
+		//set "buyButtonVisuals_dmg::visible" "1" ;
+		//set "buyButtonFunctionality_dmg::visible" "1" ;		
 	}
 	
 	onNamedEvent showAmmoArmorButtons
@@ -927,8 +927,10 @@ windowDef Desktop
 	onNamedEvent setVisible
 	{
 		namedevent "showWeaponButtons";
-		namedevent "showAmmoArmorButtons";
-		namedevent "showTeamPowerupButtons";
+		namedevent "hideAmmoArmorButtons";
+		namedevent "hideTeamPowerupButtons";
+		//namedevent "showAmmoArmorButtons";
+		//namedevent "showTeamPowerupButtons";
 		set "mainBuyWindowDef::visible" "1" ;
 		set "closeButtonVisuals::visible" "1" ;
 	}
@@ -1074,7 +1076,7 @@ windowDef Desktop
 		windowDef titleBarArmorAmmo // was vote_b3
 		{
 			rect	"desktop::titleBarRectArmorAmmo_x","desktop::titleBarRectArmorAmmo_y","desktop::titleBarRect_width","desktop::titleBarRect_height"
-			visible	1
+			visible	0
 			background	"gfx/guis/mainmenu/b3_light"
 			matcolor	0,0,0,1
 			matscaley	-1
@@ -1082,7 +1084,7 @@ windowDef Desktop
 			windowDef titleBarArmorAmmoText
 			{
 				rect	"desktop::titleBarText_offset_x","desktop::titleBarText_offset_y","desktop::titleBarRect_width","desktop::titleBarRect_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,"desktop::titleBarTextAlpha"
 				text	"#str_222004"
 				textscale	.35
@@ -1093,7 +1095,7 @@ windowDef Desktop
 		windowDef titleBarTeamPowerups // was vote_b3
 		{
 			rect	"desktop::titleBarRectTeamPowerups_x","desktop::titleBarRectTeamPowerups_y","desktop::titleBarRect_width","desktop::titleBarRect_height"
-			visible	1
+			visible	0
 			background	"gfx/guis/mainmenu/b3_light"
 			//matcolor	0.545,0.588,0.294,0.2
 			matcolor	0,0,0,1
@@ -1102,7 +1104,7 @@ windowDef Desktop
 			windowDef titleBarTeamPowerupsText
 			{
 				rect	"desktop::titleBarText_offset_x","desktop::titleBarText_offset_y","desktop::titleBarRect_width","desktop::titleBarRect_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,"desktop::titleBarTextAlpha"
 				text	"#str_222005"
 				textscale	.35
@@ -1412,6 +1414,7 @@ windowDef Desktop
 				if ( "gui::buyStatus_shotgun" == 0 )
 				{
 					consoleCMD "buy weapon_shotgun" ;
+					set "gui::field_credits" "$gui::field_credits - $gui::price_shotgun";
 					set "cmd" "play main_menu_selection" ;
 				}
 			}
@@ -2118,7 +2121,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_ammorefill
 			{
 				rect	0,0,"desktop::buyButtonVisuals_ammoarmor_width","desktop::buyButtonVisuals_ammoarmor_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2126,7 +2129,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_ammorefill // was icon_ammorefill
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/sb_ammoregen"
 				matcolor	0,1,0,1
 			}
@@ -2134,7 +2137,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_ammorefill
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_ammorefill"
 				textscale	.28
@@ -2144,7 +2147,7 @@ windowDef Desktop
 			windowDef buyButtonText_ammorefill
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222007"
 				textscale	.28
@@ -2204,7 +2207,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_lightarmor
 			{
 				rect	0,0,"desktop::buyButtonVisuals_ammoarmor_width","desktop::buyButtonVisuals_ammoarmor_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2212,7 +2215,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_lightarmor // was icon_lightarmor
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/item_armor"
 				matcolor	1,1,0,1
 			}
@@ -2220,7 +2223,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_lightarmor
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_lightarmor"
 				textscale	.28
@@ -2230,7 +2233,7 @@ windowDef Desktop
 			windowDef buyButtonText_lightarmor
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222008"
 				textscale	.28
@@ -2290,7 +2293,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_heavyarmor
 			{
 				rect	0,0,"desktop::buyButtonVisuals_ammoarmor_width","desktop::buyButtonVisuals_ammoarmor_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2298,7 +2301,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_heavyarmor // was icon_heavyarmor
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/item_armor"
 				matcolor	1,0,0,1
 			}
@@ -2306,7 +2309,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_heavyarmor
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_heavyarmor"
 				textscale	.28
@@ -2316,7 +2319,7 @@ windowDef Desktop
 			windowDef buyButtonText_heavyarmor
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222009"
 				textscale	.28
@@ -2376,7 +2379,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_special0
 			{
 				rect	0,0,"desktop::buyButtonVisuals_teampowerups_width","desktop::buyButtonVisuals_teampowerups_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2384,7 +2387,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_special0 // was icon_special0
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/sb_ammoregen"
 				matcolor	1,1,1,1
 			}
@@ -2392,7 +2395,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_special0
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_special0"
 				textscale	.28
@@ -2402,7 +2405,7 @@ windowDef Desktop
 			windowDef buyButtonText_special0
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222010"
 				textscale	.28
@@ -2462,7 +2465,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_special1
 			{
 				rect	0,0,"desktop::buyButtonVisuals_teampowerups_width","desktop::buyButtonVisuals_teampowerups_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2470,7 +2473,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_special1 // was icon_special1
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/item_regen"
 				matcolor	1,1,1,1
 			}
@@ -2478,7 +2481,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_special1
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_special1"
 				textscale	.28
@@ -2488,7 +2491,7 @@ windowDef Desktop
 			windowDef buyButtonText_special1
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222011"
 				textscale	.28
@@ -2548,7 +2551,7 @@ windowDef Desktop
 			windowDef buyButtonBackground_special2
 			{
 				rect	0,0,"desktop::buyButtonVisuals_teampowerups_width","desktop::buyButtonVisuals_teampowerups_height"
-				visible	1
+				visible	0
 				background	"gfx/guis/mainmenu/b3_light"
 				matcolor	0,0,0,0.4
 			}
@@ -2556,7 +2559,7 @@ windowDef Desktop
 			windowDef buyButtonIcon_special2 // was icon_special2
 			{
 				rect	"desktop::buyButtonVisuals_iconOffset_x","desktop::buyButtonVisuals_iconOffset_y","desktop::buyButtonVisuals_icon_size","desktop::buyButtonVisuals_icon_size" // was 68,72,16,16
-				visible	1
+				visible	0
 				background	"gfx/guis/hud/icons/sb_doubler"
 				matcolor	1,1,1,1
 			}
@@ -2564,7 +2567,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_special2
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_special2"
 				textscale	.28
@@ -2574,7 +2577,7 @@ windowDef Desktop
 			windowDef buyButtonText_special2
 			{
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"#str_222012"
 				textscale	.28

@@ -3022,6 +3022,18 @@ void Cmd_ShuffleTeams_f( const idCmdArgs& args ) {
 	gameLocal.mpGame.ShuffleTeams();
 }
 
+/*
+===============
+Cmd_AddCash_f
+Gives the player additional buymode credits
+===============
+*/
+void Cmd_AddCash_f(const idCmdArgs& args){
+	idPlayer *player = gameLocal.GetLocalPlayer();
+	float delta = atof(args.Argv(1));
+	player->GiveCash(delta);
+}
+
 #ifndef _FINAL
 void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 	idBitMsg	outMsg;
@@ -3233,6 +3245,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
 
+	cmdSystem->AddCommand("addCash",				Cmd_AddCash_f,				CMD_FL_GAME,				"Give the player additional buy mode credits");
 }
 
 /*
