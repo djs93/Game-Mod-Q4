@@ -3487,9 +3487,11 @@ void idMultiplayerGame::SetupBuyMenuItems()
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if ( !player ) 
 		return;
-
+	common->Printf("In SetupBuyMenuItems\n");
 	buyMenu->SetStateInt( "buyStatus_shotgun", player->ItemBuyStatus( "weapon_shotgun" ) );
+	common->Printf("Result of player->ItemBuyStatus( \"weapon_shotgun\": %i)\n", player->ItemBuyStatus("weapon_shotgun"));
 	buyMenu->SetStateInt( "buyStatus_hyperblaster", player->ItemBuyStatus( "weapon_hyperblaster" ) );
+	common->Printf("Result of player->ItemBuyStatus( \"weapon_hyperblaster\": %i)\n", player->ItemBuyStatus("weapon_hyperblaster"));
 	buyMenu->SetStateInt( "buyStatus_grenadelauncher", player->ItemBuyStatus( "weapon_grenadelauncher" ) );
 	buyMenu->SetStateInt( "buyStatus_nailgun", player->ItemBuyStatus( "weapon_nailgun" ) );
 	buyMenu->SetStateInt( "buyStatus_rocketlauncher", player->ItemBuyStatus( "weapon_rocketlauncher" ) );
@@ -9083,11 +9085,50 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	//nextMenu = 4;
 	//gameLocal.sessionCommand = "game_startmenu";
 	//gameLocal.mpGame.nextMenu = 4;
-	nextMenu = 4;
-	common->Printf("currentMenu before StartMenu() call: %i\n", currentMenu);
-	gameLocal.mpGame.StartMenu();
-	gameLocal.sessionCommand = "game_startmenu";
-	common->Printf("currentMenu after StartMenu() call: %i\n", currentMenu);
+	common->Printf("Calling RenderPlayerView for buymenu in OpenLocalBuyMenu\n");
+	//gameLocal.GetLocalPlayer()->playerView.RenderPlayerView(uiManager->FindGui("guis/buymenu.gui", true, false, true));
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
+	buyMenu->SetStateInt("price_shotgun", player->GetItemCost("weapon_shotgun"));
+	buyMenu->SetStateInt("price_hyperblaster", player->GetItemCost("weapon_hyperblaster"));
+	buyMenu->SetStateInt("price_grenadelauncher", player->GetItemCost("weapon_grenadelauncher"));
+	buyMenu->SetStateInt("price_nailgun", player->GetItemCost("weapon_nailgun"));
+	buyMenu->SetStateInt("price_rocketlauncher", player->GetItemCost("weapon_rocketlauncher"));
+	buyMenu->SetStateInt("price_railgun", player->GetItemCost("weapon_railgun"));
+	buyMenu->SetStateInt("price_lightninggun", player->GetItemCost("weapon_lightninggun"));
+	//			buyMenu->SetStateInt( "price_dmg", player->GetItemCost( "weapon_dmg" ) );
+	buyMenu->SetStateInt("price_napalmgun", player->GetItemCost("weapon_napalmgun"));
+
+	buyMenu->SetStateInt("price_lightarmor", player->GetItemCost("item_armor_small"));
+	buyMenu->SetStateInt("price_heavyarmor", player->GetItemCost("item_armor_large"));
+	buyMenu->SetStateInt("price_ammorefill", player->GetItemCost("ammorefill"));
+
+	buyMenu->SetStateInt("price_special0", player->GetItemCost("ammo_regen"));
+	buyMenu->SetStateInt("price_special1", player->GetItemCost("health_regen"));
+	buyMenu->SetStateInt("price_special2", player->GetItemCost("damage_boost"));
+	RedrawLocalBuyMenu();
+	//SetupBuyMenuItems();
+	//player->hud = player->mainMenuGui;
+	player->hud = buyMenu;
+	buyMenu->HandleNamedEvent("setVisible");
+	//buyMenu->HandleNamedEvent("update_buymenu");
+	player->hud->Activate(true, gameLocal.time);
+	//player->hud->SetInteractive(true);
+	common->Printf("Is current hud interactive: %s\n", player->hud->IsInteractive() ? "Yes!" : "No :(");
+	player->hud->SetStateBool("gameDraw", true);
+	//buyMenu->Activate(true, gameLocal.time);
+	player->focusType = FOCUS_GUI;
+	player->focusUI = player->hud;
+	//player->playerView.RenderPlayerView(buyMenu);
+	common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist :(");
+	//player->SetFocus(FOCUS_GUI, 300, player, gameLocal.GetLocalPlayer()->hud);
+	//common->Printf("Current focusGUI: %s\n", player->ActiveGui()->Name());
+	//player->GetCursorGUI()->HandleNamedEvent("showCrossGui");
+	//nextMenu = 4;
+	//common->Printf("currentMenu before StartMenu() call: %i\n", currentMenu);
+	//gameLocal.mpGame.StartMenu();
+	//gameLocal.sessionCommand = "game_startmenu";
+	//common->Printf("currentMenu after StartMenu() call: %i\n", currentMenu);
 }
 
 /*	

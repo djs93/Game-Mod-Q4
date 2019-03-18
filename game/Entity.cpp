@@ -4071,7 +4071,7 @@ idEntity::HandleGuiCommands
 ================
 */
 bool idEntity::HandleGuiCommands( idEntity *entityGui, const char *cmds ) {
-	gameLocal.Printf("In idEntity HangleGuiCommands()");
+	//gameLocal.Printf("In idEntity HangleGuiCommands() with cmds %s\n", *cmds);
 	idEntity *targetEnt;
 	bool ret = false;
 	if ( entityGui && cmds && *cmds ) {

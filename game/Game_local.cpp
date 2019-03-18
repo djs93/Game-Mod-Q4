@@ -3927,7 +3927,7 @@ escReply_t idGameLocal::HandleESC( idUserInterface **gui ) {
 	}
 #endif
 //RAVEN END
-
+	common->Printf("In HandleESC, state of isMultiplayer is %s\n", isMultiplayer ? "true":"false");
 	if ( isMultiplayer ) {
 		*gui = StartMenu();
 		// we may set the gui back to NULL to hide it
@@ -3938,6 +3938,10 @@ escReply_t idGameLocal::HandleESC( idUserInterface **gui ) {
 		if ( player->HandleESC() ) {
 			return ESC_IGNORE;
 		} else {
+			common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist... what?");
+			common->Printf("Current CursorGUI: %s\n", player->GetCursorGUI() ? player->GetCursorGUI()->Name() : "Does not exist");
+			common->Printf("Current GuiActive: %s\n", player->GuiActive() ? "true" : "false");
+			common->Printf("Current hud name: %s\n", player->hud->Name());
 			return ESC_MAIN;
 		}
 	}

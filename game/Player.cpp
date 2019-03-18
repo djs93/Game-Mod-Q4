@@ -1767,6 +1767,7 @@ void idPlayer::Init( void ) {
 		teamDoublerPending = false;
 		teamDoubler = PlayEffect( "fx_doubler", renderEntity.origin, renderEntity.axis, true );
 	}
+
 }
 
 /*
@@ -1868,6 +1869,9 @@ void idPlayer::Spawn( void ) {
 		if ( mphud ) {
 			mphud->Activate( true, gameLocal.time );
 		}
+
+		buygui = uiManager->FindGui("guis/buymenu.gui", true, false, true);
+		mainMenuGui = uiManager->FindGui("guis/mainmenu.gui", true, false, true);
 
 		// load cursor
 		GetCursorGUI();
@@ -6645,6 +6649,7 @@ void idPlayer::UpdateFocus( void ) {
 
 	// Focus has a limited time, make sure it hasnt expired
 	if ( focusTime && gameLocal.time > focusTime ) {
+		common->Printf("Focus time has expired!\n");
 		ClearFocus ( );
 	}
 
@@ -6653,6 +6658,7 @@ void idPlayer::UpdateFocus( void ) {
   	}
 
 	if ( g_perfTest_noPlayerFocus.GetBool() ) {
+		common->Printf("g_perfTest_noPlayerFocus\n");
 		return;
 	}
 
@@ -7139,12 +7145,14 @@ void idPlayer::UpdateFocus( void ) {
 		}
 
 		pt = gameRenderWorld->GuiTrace( ent->GetModelDefHandle(), start, end );
+		common->Printf("pt.x: %f\npt.y: %f\npt.guiId: %i", pt.x, pt.y, pt.guiId);
 		if ( pt.x != -1 ) {
 			idUserInterface*	ui = NULL;			
 			renderEntity_t*		focusGUIrenderEntity;
 			
 			focusGUIrenderEntity = ent->GetRenderEntity();
 			if ( !focusGUIrenderEntity ) {
+				common->Printf("No focus gui render entity\n");
 				continue;
 			}
 
@@ -7153,6 +7161,12 @@ void idPlayer::UpdateFocus( void ) {
 			}
 			
 			if ( ui == NULL || !ui->IsInteractive ( ) ) {
+				if (ui == NULL){
+					common->Printf("GUI is NULL\n");
+				}
+				else{
+					common->Printf("GUI is not interactive!\n");
+				}
 				continue;
 			}
 
@@ -7163,10 +7177,12 @@ void idPlayer::UpdateFocus( void ) {
 			// but still see which guis are interractive
 			if ( focusLength > 300.0f ) {
 				ClearFocus ( );
+				common->Printf("Focus length > 300\n");
 				break;
 			} else if ( focusLength > 80.0f ) {
 				ClearFocus ( );
 				focusType = FOCUS_BRACKETS;
+				common->Printf("focusType now FOCUS_BRACKETS\n");
 #ifdef _XENON
 				// Hide the "press whatever" text
 				hud->SetStateInt( "GUIIsNotUsingDPad", 3 );
@@ -7220,6 +7236,7 @@ void idPlayer::UpdateFocus( void ) {
 			}
 
 			// clamp the mouse to the corner
+			common->Printf("Mouse clamped to corner\n");
 			const char*	command;
 			sysEvent_t	ev;
  			ev = sys->GenerateMouseMoveEvent( -2000, -2000 );
@@ -7229,6 +7246,7 @@ void idPlayer::UpdateFocus( void ) {
 			// move to an absolute position
  			ev = sys->GenerateMouseMoveEvent( pt.x * SCREEN_WIDTH, pt.y * SCREEN_HEIGHT );
 			command = ui->HandleEvent( &ev, gameLocal.time );
+			common->Printf("Mouse command: %s\n", command);
  			HandleGuiCommands( ent, command );
 			
 #ifdef _XENON
@@ -8218,40 +8236,50 @@ bool idPlayer::CanBuyItem( const char* itemName )
 
 itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 {
+	common->Printf("In ItemBuyStatus with itemName %s\n", itemName);
 	idStr itemNameStr = itemName;
 	if ( itemNameStr == "notimplemented" )
 	{
+		common->Printf("In ItemBuyStatus, not implemented item\n");
 		return IBS_NOT_ALLOWED;
 	}
 	else if( !idStr::Cmpn( itemName, "wpmod_", 6 ) )
 	{
+		common->Printf("In ItemBuyStatus, not allowed wpmod_\n");
 		return IBS_NOT_ALLOWED;
 	}
 	else if( itemNameStr == "item_armor_small" )
 	{
 		if( inventory.armor >= 190 )
+			common->Printf("In ItemBuyStatus, already have small armor\n");
 			return IBS_ALREADY_HAVE;
 
 		if( inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT )
+			common->Printf("In ItemBuyStatus, already have small armor2\n");
 			return IBS_ALREADY_HAVE;
 
 		if( PowerUpActive( POWERUP_SCOUT ) )
+			common->Printf("In ItemBuyStatus, not allowed small armor\n");
 			return IBS_NOT_ALLOWED;
 	}
 	else if( itemNameStr == "item_armor_large" )
 	{
 		if( inventory.armor >= 190 )
+			common->Printf("In ItemBuyStatus, already have large armor\n");
 			return IBS_ALREADY_HAVE;
 
 		if( inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY )
+			common->Printf("In ItemBuyStatus, already have large armor (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
 
 		if( PowerUpActive( POWERUP_SCOUT ) )
+			common->Printf("In ItemBuyStatus, not allowed large armore\n");
 			return IBS_NOT_ALLOWED;
 	}
 	else if( itemNameStr == "ammorefill" )
 	{
 		if( inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO )
+			common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
 
 		// If we are full of ammo for all weapons, you can't buy the ammo refill anymore.
@@ -8262,31 +8290,39 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 				fullAmmo = false;
 		}
 		if ( fullAmmo )
+			common->Printf("In ItemBuyStatus, return not allowed (b/c full ammo)\n");
 			return IBS_NOT_ALLOWED;
 	}
 	else if ( itemNameStr == "fc_armor_regen" )
 	{
+		common->Printf("In ItemBuyStatus, not allowed fc_ammo_regen\n");
 		return IBS_NOT_ALLOWED;
 	}
 
 	if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
 		if ( itemNameStr == "ammo_regen" )
+			common->Printf("In ItemBuyStatus, not allowed ammo regen\n");
 			return IBS_NOT_ALLOWED;
 		if ( itemNameStr == "health_regen" )
+			common->Printf("In ItemBuyStatus, not allowed health regen\n");
 			return IBS_NOT_ALLOWED;
 		if ( itemNameStr == "damage_boost" )
+			common->Printf("In ItemBuyStatus, not allowed damage boost\n");
 			return IBS_NOT_ALLOWED;
 	}
 
-	if ( CanSelectWeapon(itemName) != -1 )
-		return IBS_ALREADY_HAVE;
+	if (CanSelectWeapon(itemName) != -1){
+		common->Printf("Already have %s\n", itemName);
+		return IBS_ALREADY_HAVE; //Is returning this for all weapons and not printing anything before it. Figure out why please future Dale uwu
+	}//I SWEAR TO CHEESUS, RAVEN FORGOT THE BRACES ON THIS IF STATEMENT AND THAT'S WHY IT WAS RETURNING BUT NOT PRINTING. AAAAAAAA. (good job future Dale)
 
 	int cost = GetItemCost(itemName);
 	if ( cost > (int)buyMenuCash )
 	{
+		common->Printf("In ItemBuyStatus, return cannot afford\n");
 		return IBS_CANNOT_AFFORD;
 	}
-
+	common->Printf("In ItemBuyStatus, final return\n");
 	return IBS_CAN_BUY;
 }
 
@@ -9302,6 +9338,7 @@ void idPlayer::Think( void ) {
 	}
 
 	if ( !gameLocal.usercmds ) {
+		common->Printf("No usercmds\n");
 		return;
 	}
 
@@ -9316,6 +9353,7 @@ void idPlayer::Think( void ) {
 
  	// Dont do any thinking if we are in modview
 	if ( gameLocal.editors & EDITOR_MODVIEW || gameEdit->PlayPlayback() ) {
+		common->Printf("In gameLocal.editors loop\n");
 		// calculate the exact bobbed view position, which is used to
 		// position the view weapon, among other things
 		CalculateFirstPersonView();
@@ -9486,7 +9524,12 @@ void idPlayer::Think( void ) {
 	// if we have an active gui, we will unrotate the view angles as
 	// we turn the mouse movements into gui events
 	idUserInterface *gui = ActiveGui();
+	if (hud->Name() == buygui->Name() || hud->Name() == mainMenuGui->Name()){
+		//hud->SetCursor(usercmd.mx, usercmd.my);
+		RouteGuiMouse(hud);
+	}
 	if ( gui && gui != focusUI ) {
+		common->Printf("Going into RouteGuiMouse\n");
 		RouteGuiMouse( gui );
 	}
 
@@ -9658,8 +9701,11 @@ void idPlayer::RouteGuiMouse( idUserInterface *gui ) {
 	if ( usercmd.mx != oldMouseX || usercmd.my != oldMouseY ) {
  		ev = sys->GenerateMouseMoveEvent( usercmd.mx - oldMouseX, usercmd.my - oldMouseY );
  		command = gui->HandleEvent( &ev, gameLocal.time );
+		HandleGuiCommands(this, command);
 		oldMouseX = usercmd.mx;
 		oldMouseY = usercmd.my;
+		//common->Printf("RouteGuiMouse command: \n",command);
+		//common->Printf("oldMouseX: %i\toldMouseY: %i\n", oldMouseX, oldMouseY);
 	}
 }
 

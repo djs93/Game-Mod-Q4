@@ -797,6 +797,13 @@ public:
 	void					ResetCash();
 // RITUAL END
 
+	void					SetFocus(playerFocus_t type, int focusTime, idEntity* ent, idUserInterface* ui);
+	playerFocus_t			focusType;
+	idUserInterface *		ActiveGui(void);
+	idUserInterface *		mainMenuGui;
+	// if there is a focusGUIent, the attack button will be changed into mouse clicks
+	idUserInterface *		focusUI;
+
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
 
@@ -908,10 +915,9 @@ private:
 	int						demoViewAngleTime;
 	idAngles				demoViewAngles;
 
-	// if there is a focusGUIent, the attack button will be changed into mouse clicks
-	idUserInterface *		focusUI;
+
 	int						focusTime;
-	playerFocus_t			focusType;
+
 	idEntityPtr<idEntity>	focusEnt;
 	idUserInterface *		focusBrackets;	
 	int						focusBracketsTime;
@@ -1036,7 +1042,7 @@ private:
  	void					InitAASLocation( void );
  	void					SetAASLocation( void );
 
-	idUserInterface *		ActiveGui( void );
+
 
 	void					UpdateWeapon				( void );
 	void					UpdateSpectating			( void );
@@ -1062,7 +1068,6 @@ private:
 
 	void					ClearFocus					( void );
 	void					UpdateFocusCharacter		( idEntity* newEnt );
-	void					SetFocus					( playerFocus_t type, int focusTime, idEntity* ent, idUserInterface* ui );
 
 	void					Event_GetButtons			( void );
 	void					Event_GetMove				( void );
