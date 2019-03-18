@@ -3487,11 +3487,12 @@ void idMultiplayerGame::SetupBuyMenuItems()
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if ( !player ) 
 		return;
-	common->Printf("In SetupBuyMenuItems\n");
+	//common->Printf("In SetupBuyMenuItems\n");
+	buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
 	buyMenu->SetStateInt( "buyStatus_shotgun", player->ItemBuyStatus( "weapon_shotgun" ) );
-	common->Printf("Result of player->ItemBuyStatus( \"weapon_shotgun\": %i)\n", player->ItemBuyStatus("weapon_shotgun"));
+	//common->Printf("Result of player->ItemBuyStatus( \"weapon_shotgun\": %i)\n", player->ItemBuyStatus("weapon_shotgun"));
 	buyMenu->SetStateInt( "buyStatus_hyperblaster", player->ItemBuyStatus( "weapon_hyperblaster" ) );
-	common->Printf("Result of player->ItemBuyStatus( \"weapon_hyperblaster\": %i)\n", player->ItemBuyStatus("weapon_hyperblaster"));
+	//common->Printf("Result of player->ItemBuyStatus( \"weapon_hyperblaster\": %i)\n", player->ItemBuyStatus("weapon_hyperblaster"));
 	buyMenu->SetStateInt( "buyStatus_grenadelauncher", player->ItemBuyStatus( "weapon_grenadelauncher" ) );
 	buyMenu->SetStateInt( "buyStatus_nailgun", player->ItemBuyStatus( "weapon_nailgun" ) );
 	buyMenu->SetStateInt( "buyStatus_rocketlauncher", player->ItemBuyStatus( "weapon_rocketlauncher" ) );
@@ -4059,6 +4060,7 @@ const char* idMultiplayerGame::HandleGuiCommands( const char *_menuCommand ) {
 			DisableMenu( );
 			return NULL;
 		} else if (	!idStr::Icmp( cmd, "play" )	) {
+			common->Printf("In MultiplayerGame's HandleGuiCommands(%s)\n", _menuCommand);
 			if ( args.Argc() - icmd	>= 1 ) {
 				idStr snd =	args.Argv( icmd++ );
 				int	channel	= 1;
@@ -9078,14 +9080,14 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	//		return;
 	//}
 
-	if ( currentMenu == 4 )
-		return; // Already open
+	//if ( currentMenu == 4 )
+	//	return; // Already open
 
 	//common->Printf("Attempt to open buy menu");
 	//nextMenu = 4;
 	//gameLocal.sessionCommand = "game_startmenu";
 	//gameLocal.mpGame.nextMenu = 4;
-	common->Printf("Calling RenderPlayerView for buymenu in OpenLocalBuyMenu\n");
+	//common->Printf("Calling RenderPlayerView for buymenu in OpenLocalBuyMenu\n");
 	//gameLocal.GetLocalPlayer()->playerView.RenderPlayerView(uiManager->FindGui("guis/buymenu.gui", true, false, true));
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	buyMenu->SetStateString("field_credits", va("%i", (int)player->buyMenuCash));
@@ -9106,21 +9108,24 @@ void idMultiplayerGame::OpenLocalBuyMenu( void )
 	buyMenu->SetStateInt("price_special0", player->GetItemCost("ammo_regen"));
 	buyMenu->SetStateInt("price_special1", player->GetItemCost("health_regen"));
 	buyMenu->SetStateInt("price_special2", player->GetItemCost("damage_boost"));
-	RedrawLocalBuyMenu();
-	//SetupBuyMenuItems();
+	//RedrawLocalBuyMenu();
+	
 	//player->hud = player->mainMenuGui;
 	player->hud = buyMenu;
-	buyMenu->HandleNamedEvent("setVisible");
+	player->hud->Redraw(gameLocal.time);
+	//buyMenu->HandleNamedEvent("setVisible");
 	//buyMenu->HandleNamedEvent("update_buymenu");
 	player->hud->Activate(true, gameLocal.time);
+	SetupBuyMenuItems();
+	player->hud->HandleNamedEvent("update_buymenu");
 	//player->hud->SetInteractive(true);
-	common->Printf("Is current hud interactive: %s\n", player->hud->IsInteractive() ? "Yes!" : "No :(");
+	//common->Printf("Is current hud interactive: %s\n", player->hud->IsInteractive() ? "Yes!" : "No :(");
 	player->hud->SetStateBool("gameDraw", true);
 	//buyMenu->Activate(true, gameLocal.time);
 	player->focusType = FOCUS_GUI;
 	player->focusUI = player->hud;
 	//player->playerView.RenderPlayerView(buyMenu);
-	common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist :(");
+	//common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist :(");
 	//player->SetFocus(FOCUS_GUI, 300, player, gameLocal.GetLocalPlayer()->hud);
 	//common->Printf("Current focusGUI: %s\n", player->ActiveGui()->Name());
 	//player->GetCursorGUI()->HandleNamedEvent("showCrossGui");

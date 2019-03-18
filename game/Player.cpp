@@ -1105,6 +1105,7 @@ idPlayer::idPlayer() {
 	weapon					= NULL;
 
 	hud						= NULL;
+	defaultHud				= NULL;
 	mphud					= NULL;
 	buygui					= NULL;
 	objectiveSystem			= NULL;
@@ -1841,6 +1842,7 @@ void idPlayer::Spawn( void ) {
 		
 		// load HUD
 		hud = NULL;
+		defaultHud = NULL;
 		mphud = NULL;
  		
 		overlayHud = NULL;
@@ -1850,6 +1852,7 @@ void idPlayer::Spawn( void ) {
 
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
 			hud = uiManager->FindGui( temp, true, false, true );
+			defaultHud = uiManager->FindGui(temp, true, false, true);
 		} else {
 			gameLocal.Warning( "idPlayer::Spawn() - No hud for player." );
 		}
@@ -6276,17 +6279,21 @@ void idPlayer::Weapon_GUI( void ) {
 		if ( ui ) {
  			ev = sys->GenerateMouseButtonEvent( 1, ( usercmd.buttons & BUTTON_ATTACK ) != 0 );
 			command = ui->HandleEvent( &ev, gameLocal.time, &updateVisuals );
+			common->Printf("WeaponGUI mouse command: %s\n", command);
 			if ( updateVisuals && focusEnt && ui == focusUI ) {
 				focusEnt->UpdateVisuals();
 			}
 		}
 		if ( gameLocal.isClient ) {
 			// we predict enough, but don't want to execute commands
+			common->Printf("Not executing commands because client\n");
 			return;
 		}
 		if ( focusEnt ) {
+			common->Printf("Handling command in if(focusEnt)\n");
 			HandleGuiCommands( focusEnt, command );
 		} else {
+			common->Printf("Handling command in else\n");
 			HandleGuiCommands( this, command );
 		}
 	}
@@ -8236,56 +8243,56 @@ bool idPlayer::CanBuyItem( const char* itemName )
 
 itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 {
-	common->Printf("In ItemBuyStatus with itemName %s\n", itemName);
+	//common->Printf("In ItemBuyStatus with itemName %s\n", itemName);
 	idStr itemNameStr = itemName;
 	if ( itemNameStr == "notimplemented" )
 	{
-		common->Printf("In ItemBuyStatus, not implemented item\n");
+		//common->Printf("In ItemBuyStatus, not implemented item\n");
 		return IBS_NOT_ALLOWED;
 	}
 	else if( !idStr::Cmpn( itemName, "wpmod_", 6 ) )
 	{
-		common->Printf("In ItemBuyStatus, not allowed wpmod_\n");
+		//common->Printf("In ItemBuyStatus, not allowed wpmod_\n");
 		return IBS_NOT_ALLOWED;
 	}
 	else if( itemNameStr == "item_armor_small" )
 	{
 		if (inventory.armor >= 190){
-			common->Printf("In ItemBuyStatus, already have small armor\n");
+			//common->Printf("In ItemBuyStatus, already have small armor\n");
 			return IBS_ALREADY_HAVE;
 		}
 
 		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_LIGHT){
-			common->Printf("In ItemBuyStatus, already have small armor2\n");
+			//common->Printf("In ItemBuyStatus, already have small armor2\n");
 			return IBS_ALREADY_HAVE;
 		}
 
 		if (PowerUpActive(POWERUP_SCOUT)){
-			common->Printf("In ItemBuyStatus, not allowed small armor\n");
+			//common->Printf("In ItemBuyStatus, not allowed small armor\n");
 			return IBS_NOT_ALLOWED;
 		}
 	}
 	else if( itemNameStr == "item_armor_large" )
 	{
 		if (inventory.armor >= 190){
-			common->Printf("In ItemBuyStatus, already have large armor\n");
+			//common->Printf("In ItemBuyStatus, already have large armor\n");
 			return IBS_ALREADY_HAVE;
 		}
 
 		if (inventory.carryOverWeapons & CARRYOVER_FLAG_ARMOR_HEAVY){
-			common->Printf("In ItemBuyStatus, already have large armor (carryOverWeapons)\n");
+			//common->Printf("In ItemBuyStatus, already have large armor (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
 		}
 
 		if (PowerUpActive(POWERUP_SCOUT)){
-			common->Printf("In ItemBuyStatus, not allowed large armore\n");
+			//common->Printf("In ItemBuyStatus, not allowed large armore\n");
 			return IBS_NOT_ALLOWED;
 		}
 	}
 	else if( itemNameStr == "ammorefill" )
 	{
 		if (inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO){
-			common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
+			//common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
 			return IBS_ALREADY_HAVE;
 		}
 
@@ -8298,43 +8305,43 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 			}
 		}
 		if (fullAmmo){
-			common->Printf("In ItemBuyStatus, return not allowed (b/c full ammo)\n");
+			//common->Printf("In ItemBuyStatus, return not allowed (b/c full ammo)\n");
 			return IBS_NOT_ALLOWED;
 		}
 	}
 	else if ( itemNameStr == "fc_armor_regen" )
 	{
-		common->Printf("In ItemBuyStatus, not allowed fc_ammo_regen\n");
+		//common->Printf("In ItemBuyStatus, not allowed fc_ammo_regen\n");
 		return IBS_NOT_ALLOWED;
 	}
 
 	if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
 		if (itemNameStr == "ammo_regen"){
-			common->Printf("In ItemBuyStatus, not allowed ammo regen\n");
+			//common->Printf("In ItemBuyStatus, not allowed ammo regen\n");
 			return IBS_NOT_ALLOWED;
 		}
 		if (itemNameStr == "health_regen"){
-			common->Printf("In ItemBuyStatus, not allowed health regen\n");
+			//common->Printf("In ItemBuyStatus, not allowed health regen\n");
 			return IBS_NOT_ALLOWED;
 		}
 		if (itemNameStr == "damage_boost"){
-			common->Printf("In ItemBuyStatus, not allowed damage boost\n");
+			//common->Printf("In ItemBuyStatus, not allowed damage boost\n");
 			return IBS_NOT_ALLOWED;
 		}
 	}
 
 	if (CanSelectWeapon(itemName) != -1){
-		common->Printf("Already have %s\n", itemName);
+		//common->Printf("Already have %s\n", itemName);
 		return IBS_ALREADY_HAVE; //Is returning this for all weapons and not printing anything before it. Figure out why please future Dale uwu
 	}//I SWEAR TO CHEESUS, RAVEN FORGOT THE BRACES ON THIS IF STATEMENT AND THAT'S WHY IT WAS RETURNING BUT NOT PRINTING. AAAAAAAA. (good job future Dale)
 
 	int cost = GetItemCost(itemName);
 	if ( cost > (int)buyMenuCash )
 	{
-		common->Printf("In ItemBuyStatus, return cannot afford\n");
+		//common->Printf("In ItemBuyStatus, return cannot afford\n");
 		return IBS_CANNOT_AFFORD;
 	}
-	common->Printf("In ItemBuyStatus, final return\n");
+	//common->Printf("In ItemBuyStatus, final return\n");
 	return IBS_CAN_BUY;
 }
 

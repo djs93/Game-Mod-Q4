@@ -4164,6 +4164,10 @@ bool idEntity::HandleGuiCommands( idEntity *entityGui, const char *cmds ) {
 			}
 
 			if ( token.Icmp("close") == 0 ) {
+				if (entityGui == gameLocal.GetLocalPlayer()){
+					gameLocal.GetLocalPlayer()->hud = gameLocal.GetLocalPlayer()->defaultHud;
+					gameLocal.GetLocalPlayer()->ClearFocus();
+				}
 				ret = true;
 				continue;
 			}

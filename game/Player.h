@@ -339,6 +339,7 @@ public:
 
 
  	idUserInterface *		hud;				// Common hud
+	idUserInterface *		defaultHud;			// Common hud to restore later
 	idUserInterface *		mphud;				// hud overlay containing MP elements
 	idUserInterface *		buygui;				// hud overlay containing MP elements
 	
@@ -804,6 +805,8 @@ public:
 	// if there is a focusGUIent, the attack button will be changed into mouse clicks
 	idUserInterface *		focusUI;
 
+	void					ClearFocus(void);
+
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
 
@@ -1066,7 +1069,7 @@ private:
 
 	void					LoadDeferredModel			( void );
 
-	void					ClearFocus					( void );
+
 	void					UpdateFocusCharacter		( idEntity* newEnt );
 
 	void					Event_GetButtons			( void );
