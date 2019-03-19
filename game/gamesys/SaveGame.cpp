@@ -1013,9 +1013,7 @@ void idRestoreGame::CreateObjects( void ) {
 	int i, num;
 	idStr classname;
 	idTypeInfo *type;
-
 	ReadInt( num );
-
 	// create all the objects
 	objects.SetNum( num + 1 );
 	memset( objects.Ptr(), 0, sizeof( objects[ 0 ] ) * objects.Num() );
@@ -1026,6 +1024,7 @@ void idRestoreGame::CreateObjects( void ) {
 		if ( !type ) {
 			Error( "idRestoreGame::CreateObjects: Unknown class '%s'", classname.c_str() );
 		}
+		common->Printf("idRestoreGame::CreateObjects: classname '%s'\n", classname.c_str());
 		objects[ i ] = type->CreateInstance();
 		assert( objects[ i ] != NULL );
 	}

@@ -2002,14 +2002,14 @@ bool idGameLocal::InitFromSaveGame( const char *mapName, idRenderWorld *renderWo
 	gamestate = GAMESTATE_STARTUP;
 
 	gameRenderWorld = renderWorld;
-
+	common->Printf("1");
 	idRestoreGame savegame( saveGameFile );
-
+	common->Printf("2");
 	savegame.ReadBuildNumber();
-
+	common->Printf("3");
 	// Create the list of all objects in the game
 	savegame.CreateObjects();
-
+	common->Printf("4");
 	// Load the idProgram, also checking to make sure scripting hasn't changed since the savegame
 	if ( program.Restore( &savegame ) == false ) {
 
@@ -2020,11 +2020,12 @@ bool idGameLocal::InitFromSaveGame( const char *mapName, idRenderWorld *renderWo
 
 		return false;
 	}
-
+	common->Printf("5");
 	// load the map needed for this savegame
 	LoadMap( mapName, 0 );
-
+	common->Printf("6");
 	savegame.ReadInt( i );
+	common->Printf("7");
 	g_skill.SetInteger( i );
 
 	// precache any media specified in the map

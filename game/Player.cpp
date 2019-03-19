@@ -234,6 +234,7 @@ void idInventory::Clear( void ) {
 	memset( ammoIndices, -1, sizeof( int ) * MAX_WEAPONS );
 	memset( startingAmmo, -1, sizeof( int ) * MAX_WEAPONS );
 	memset( ammoRegenTime, -1, sizeof( int ) * MAX_WEAPONS );
+
 }
 
 /*
@@ -388,6 +389,7 @@ void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 		lti.triggerName = dict.GetString( itemname );
 		levelTriggers.Append( lti );
 	}
+
 
 }
 
@@ -2350,6 +2352,11 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 		hud->HandleNamedEvent( "Message" );
  	}
 #endif
+	savefile->WriteBool(rabadonsActive);
+	savefile->WriteBool(ardentActive);
+	savefile->WriteBool(duskbladeActive);
+	savefile->WriteBool(warmogsActive);
+	savefile->WriteBool(runaansActive);
 }
 
 /*
@@ -2654,6 +2661,11 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 	declManager->FindType( DECL_ENTITYDEF, "dmg_shellshock", false, false );
 	declManager->FindType( DECL_ENTITYDEF, "dmg_shellshock_nohl", false, false );
 // RAVEN END
+	savefile->ReadBool(rabadonsActive);
+	savefile->ReadBool(ardentActive);
+	savefile->ReadBool(duskbladeActive);
+	savefile->ReadBool(warmogsActive);
+	savefile->ReadBool(runaansActive);
 }
 
 /*
@@ -2993,6 +3005,11 @@ void idPlayer::SavePersistantInfo( void ) {
 	inventory.GetPersistantData( playerInfo );
 	playerInfo.SetInt( "health", health );
 	playerInfo.SetInt( "current_weapon", currentWeapon );
+	playerInfo.SetBool("rabadons_active", rabadonsActive);
+	playerInfo.SetBool("ardent_active", ardentActive);
+	playerInfo.SetBool("duskblade_active", duskbladeActive);
+	playerInfo.SetBool("warmogs_active", warmogsActive);
+	playerInfo.SetBool("runaans_active", runaansActive);
 }
 
 /*
@@ -3014,6 +3031,11 @@ void idPlayer::RestorePersistantInfo( void ) {
  	if ( !gameLocal.isClient ) {
  		idealWeapon = spawnArgs.GetInt( "current_weapon", "0" );
  	}
+	rabadonsActive = spawnArgs.GetBool("rabadons_active", "false");
+	ardentActive = spawnArgs.GetBool("ardent_active", "false");
+	duskbladeActive = spawnArgs.GetBool("duskblade_active", "false");
+	warmogsActive = spawnArgs.GetBool("warmogs_active", "false");
+	runaansActive = spawnArgs.GetBool("runaans_active", "false");
 }
 
 /*
@@ -9615,7 +9637,7 @@ void idPlayer::Think( void ) {
 		RouteGuiMouse(hud);
 	}
 	if ( gui && gui != focusUI ) {
-		common->Printf("Going into RouteGuiMouse\n");
+		//common->Printf("Going into RouteGuiMouse\n");
 		RouteGuiMouse( gui );
 	}
 
