@@ -1089,11 +1089,11 @@
 	// Ritual 1.3 patch GUI strings : #str_222000 - #str_222999
 	"#str_222000"	"Allow Buying"
 	"#str_222001"	"Napalm Gun"
-	"#str_222002"	"Credits:"
-	"#str_222003"	"Weapons"
+	"#str_222002"	"Gold:"
+	"#str_222003"	"Items"
 	"#str_222004"	"Armor / Ammo"
 	"#str_222005"	"Team Powerups"
-	"#str_222006"	"PURCHASE EQUIPMENT"
+	"#str_222006"	"ITEM SHOP"
 	"#str_222007"	"Ammo Refill"
 	"#str_222008"	"Light Armor"
 	"#str_222009"	"Heavy Armor"
@@ -1114,4 +1114,11 @@
 	"#str_223007"	"Gun Position"
 	"#str_223008"	"Right;Centered;Lower Right"
 	"#str_223009"	"Enable detailed sky"
+	
+	// Game mod GUI patches : #str_224000 - #str_224099
+	"#str_224000"	"Rabadon's Deathcap"
+	"#str_224001"	"Ardent Censer"
+	"#str_224002"	"Duskblade of Draktharr"
+	"#str_224003"	"Warmog's Armor"
+	"#str_224004"	"Runaan's Hurricane"
 }

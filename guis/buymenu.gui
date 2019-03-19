@@ -1372,7 +1372,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_200105"
+				text	"#str_224000"
 				textscale	.28
 				font	"fonts/marine"
 			}
@@ -1459,7 +1459,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y", "desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_200108"
+				text	"#str_224001"
 				textscale	.28
 				font	"fonts/marine"
 			}
@@ -1545,7 +1545,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y", "desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_200109"
+				text	"#str_224002"
 				textscale	.28
 				font	"fonts/marine"
 			}
@@ -1631,7 +1631,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y", "desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_200107"
+				text	"#str_224003"
 				textscale	.28
 				font	"fonts/marine"
 			}
@@ -1717,7 +1717,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y", "desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_200112"
+				text	"#str_224004"
 				textscale	.28
 				font	"fonts/marine"
 			}

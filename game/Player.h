@@ -807,6 +807,22 @@ public:
 
 	void					ClearFocus(void);
 
+	float					rabadonsDmgMult;
+	float					ardentDmgMult;
+	float					ardentCDMult;
+	float					duskbladeDmgMult;
+	float					warmogsHealthInc;
+	float					runaansCDMult;
+
+	bool					rabadonsActive;
+	bool					ardentActive;
+	bool					duskbladeActive;
+	bool					warmogsActive;
+	bool					runaansActive;
+
+	float					getDmgMult();
+	float					getCDMult();
+
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
 

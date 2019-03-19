@@ -1344,6 +1344,12 @@ idPlayer::idPlayer() {
 	teamAmmoRegenPending	= false;
 	teamDoubler			= NULL;		
 	teamDoublerPending		= false;
+
+	rabadonsActive = false;
+	ardentActive = false;
+	duskbladeActive = false;
+	warmogsActive = false;
+	runaansActive = false;
 }
 
 /*
@@ -8334,11 +8340,6 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 		}
 	//}
 
-	if (CanSelectWeapon(itemName) != -1){
-		//common->Printf("Already have %s\n", itemName);
-		return IBS_ALREADY_HAVE; //Is returning this for all weapons and not printing anything before it. Figure out why please future Dale uwu
-	}//I SWEAR TO CHEESUS, RAVEN FORGOT THE BRACES ON THIS IF STATEMENT AND THAT'S WHY IT WAS RETURNING BUT NOT PRINTING. AAAAAAAA. (good job future Dale)
-
 	if (idStr::Cmp("weapon_napalmgun", itemName) == 0){
 		return IBS_NOT_ALLOWED;//Don't want napalm gun to function
 	}
@@ -8348,6 +8349,37 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	else if (idStr::Cmp("weapon_railgun", itemName) == 0){
 		return IBS_NOT_ALLOWED;//Don't want railgun to function
 	}
+	else if (idStr::Cmp("weapon_shotgun", itemName) == 0){
+		if (rabadonsActive){ 
+			return IBS_ALREADY_HAVE;
+		}
+	}
+	else if (idStr::Cmp("weapon_grenadelauncher", itemName) == 0){
+		if (ardentActive){
+			return IBS_ALREADY_HAVE;
+		}
+	}
+	else if (idStr::Cmp("weapon_nailgun", itemName) == 0){
+		if (duskbladeActive){
+			return IBS_ALREADY_HAVE;
+		}
+	}
+	else if (idStr::Cmp("weapon_hyperblaster", itemName) == 0){
+		if (warmogsActive){
+			return IBS_ALREADY_HAVE;
+		}
+	}
+	else if (idStr::Cmp("weapon_lightninggun", itemName) == 0){
+		if (runaansActive){
+			return IBS_ALREADY_HAVE;
+		}
+	}
+	//if (CanSelectWeapon(itemName) != -1){
+		//common->Printf("Already have %s\n", itemName);
+	//	return IBS_ALREADY_HAVE; //Is returning this for all weapons and not printing anything before it. Figure out why please future Dale uwu
+	//}//I SWEAR TO CHEESUS, RAVEN FORGOT THE BRACES ON THIS IF STATEMENT AND THAT'S WHY IT WAS RETURNING BUT NOT PRINTING. AAAAAAAA. (good job future Dale)
+	//Don't need this anymore because we don't want to check for weapon purchases, only items
+	
 	int cost = GetItemCost(itemName);
 	if ( cost > (int)buyMenuCash )
 	{
@@ -8469,8 +8501,30 @@ bool idPlayer::AttemptToBuyItem( const char* itemName )
 	if ( itemNameStr == "ammo_regen" || itemNameStr == "health_regen" || itemNameStr == "damage_boost" ) {
 		return AttemptToBuyTeamPowerup(itemName);
 	}
-
-	GiveStuffToPlayer( this, itemName, NULL );
+	if (!idStr::Icmpn(itemName, "weapon_", 7)){
+		if (!idStr::Icmp(itemName, "weapon_shotgun")){
+			rabadonsActive = true;
+		}
+		else if (!idStr::Icmp(itemName, "weapon_grenadelauncher")){
+			ardentActive = true;
+		}
+		else if (!idStr::Icmp(itemName, "weapon_nailgun")){
+			duskbladeActive = true;
+		}
+		else if (!idStr::Icmp(itemName, "weapon_hyperblaster")){
+			inventory.maxHealth += spawnArgs.GetInt("warmogs_health_inc");
+			warmogsActive = true;
+		}
+		else if (!idStr::Icmp(itemName, "weapon_lightninggun")){
+			runaansActive = true;
+		}
+		else{
+			GiveStuffToPlayer(this, itemName, NULL);
+		}
+	}
+	else{
+		GiveStuffToPlayer( this, itemName, NULL );
+	}
 	gameLocal.mpGame.RedrawLocalBuyMenu();
 	return true;
 }
