@@ -317,6 +317,8 @@ void idInventory::GetPersistantData( idDict &dict ) {
 		sprintf( key, "levelTrigger_Trigger_%i", i );
 		dict.Set( key, levelTriggers[i].triggerName );
 	}
+
+	dict.SetInt("maxHealth", maxHealth);
 }
 
 /*
@@ -390,7 +392,7 @@ void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 		levelTriggers.Append( lti );
 	}
 
-
+	maxHealth = dict.GetInt("maxHealth");
 }
 
 /*
@@ -3010,6 +3012,7 @@ void idPlayer::SavePersistantInfo( void ) {
 	playerInfo.SetBool("duskblade_active", duskbladeActive);
 	playerInfo.SetBool("warmogs_active", warmogsActive);
 	playerInfo.SetBool("runaans_active", runaansActive);
+	playerInfo.SetFloat("buyCash", buyMenuCash);
 }
 
 /*
@@ -3036,6 +3039,8 @@ void idPlayer::RestorePersistantInfo( void ) {
 	duskbladeActive = spawnArgs.GetBool("duskblade_active", "false");
 	warmogsActive = spawnArgs.GetBool("warmogs_active", "false");
 	runaansActive = spawnArgs.GetBool("runaans_active", "false");
+	buyMenuCash = spawnArgs.GetFloat("buyCash", "0.0");
+	//ADD LEVELS AND EXP HERE
 }
 
 /*
