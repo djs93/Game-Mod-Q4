@@ -284,7 +284,7 @@ void rvWeaponGauntlet::Attack ( void ) {
 		if ( ent ) {
 			if ( ent->fl.takedamage ) {
 				float dmgScale = 1.0f;
-				dmgScale *= owner->PowerUpModifier( PMOD_MELEE_DAMAGE );
+				dmgScale *= owner->PowerUpModifier(PMOD_MELEE_DAMAGE)* owner->getDmgMult();
 				ent->Damage ( owner, owner, playerViewAxis[0], spawnArgs.GetString ( "def_damage" ), dmgScale, 0 );
 				StartSound( "snd_hit", SND_CHANNEL_ANY, 0, false, NULL );
 				if ( ent->spawnArgs.GetBool( "bleed" ) ) {
@@ -298,7 +298,7 @@ void rvWeaponGauntlet::Attack ( void ) {
 		} else {
 			PlayLoopSound( LOOP_NONE );
 		}
-		nextAttackTime = gameLocal.time + fireRate;
+		nextAttackTime = gameLocal.time + fireRate * owner->getCDMult();
 	}
 }
 

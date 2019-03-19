@@ -106,7 +106,7 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	if ( wsfl.attack && gameLocal.time >= nextAttackTime ) {
 		// Save the time which the fire button was pressed
 		if ( fireHeldTime == 0 ) {		
-			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ) * owner->getCDMult());
 			fireHeldTime   = gameLocal.time;
 			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, chargeGlow[0] );
 		}
@@ -441,7 +441,7 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				//gameLocal.mpGame.SetCurrentMenu(4);
 				//gameLocal.mpGame.StartMenu();
 				
-				Attack ( true, 1, spread, 0, 1.0f );
+				Attack ( true, 1, spread, 0, 1.0f * owner->getDmgMult() );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
@@ -459,7 +459,7 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				//gameLocal.mpGame.SetCurrentMenu(4);
 				//gameLocal.mpGame.StartMenu();
 
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack(false, 1, spread, 0, 1.0f * owner->getDmgMult());
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}

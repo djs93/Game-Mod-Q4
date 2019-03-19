@@ -2820,7 +2820,7 @@ void rvWeapon::Hitscan( const idDict& dict, const idVec3& muzzleOrigin, const id
 		}
 		dir.Normalize();
 
-		gameLocal.HitScan( dict, muzzleOrigin, dir, fxOrigin, owner, false, 1.0f, NULL, areas );
+		gameLocal.HitScan( dict, muzzleOrigin, dir, fxOrigin, owner, false, power, NULL, areas );
 
 		if ( gameLocal.isServer ) {
 			msg.WriteDir( dir, 24 );

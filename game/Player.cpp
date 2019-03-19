@@ -14213,4 +14213,41 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 	return weaponNum;
 }
 
+/*
+===============
+idPlayer::getDmgMult
+Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+===============
+*/
+float idPlayer::getDmgMult(){
+	float mult = 1.0f;
+	if (rabadonsActive){
+		mult += (spawnArgs.GetFloat("rabadons_dmg_mult", "1.3")-1.0f);
+	}
+	if (ardentActive){
+		mult += (spawnArgs.GetFloat("ardent_dmg_mult", "1.1") - 1.0f);
+	}
+	if (duskbladeActive){
+		mult += (spawnArgs.GetFloat("deskblade_dmg_mult", "1.3") - 1.0f);
+	}
+	return mult;
+}
+
+/*
+===============
+idPlayer::getCDMult
+Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+===============
+*/
+float idPlayer::getCDMult(){
+	float mult = 1.0f;
+	if (ardentActive){
+		mult -= (1.0f - spawnArgs.GetFloat("ardent_cd_mult", "0.8"));
+	}
+	if (runaansActive){
+		mult -= (1.0f - spawnArgs.GetFloat("runaans_cd_mult", "0.6"));
+	}
+	return mult;
+}
+
 // RITUAL END
