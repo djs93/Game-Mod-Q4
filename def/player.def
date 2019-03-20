@@ -813,6 +813,13 @@ entityDef player_marine
 	"duskblade_dmg_mult"				"1.3"
 	"warmogs_health_inc"				"100"
 	"runaans_cd_mult"					"0.6"
+	
+	"max_level"							"18"
+	"cdr_per_level"						"0.05"
+	"dmg_per_level"						"0.05"
+	"level_ramp"						"2.0"
+	"exp_to_level_two"					"160"
+	"starting_level"					"1"
 }
 
 entityDef player_strogg
