@@ -3395,6 +3395,7 @@ idPlayer::UpdateHudAmmo
 ===============
 */
 void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
+	/*
 	int inclip;
 	int ammoamount;
 
@@ -3426,6 +3427,12 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 	} 
 
 	_hud->SetStateBool( "player_ammo_empty", ( ammoamount == 0 ) );
+	*/
+	common->Printf("Setting ammo percent to: %f\n", (float)exp / (float)nextLevelExp);
+	_hud->SetStateFloat("player_ammopct", (float)exp / (float)nextLevelExp);
+	common->Printf("Setting totalammo to: %i\n", level);
+	_hud->SetStateString("player_ammo", "-1");
+	_hud->SetStateInt("player_totalammo", level);
 }
 
 /*
@@ -3478,10 +3485,11 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 
 	//_hud->HandleNamedEvent( "updateArmorHealthAir" );
 
-	if ( weapon ) {
-		UpdateHudAmmo( _hud );
-	}
-	
+	//if ( weapon ) {
+	//	UpdateHudAmmo( _hud );
+	//}
+	UpdateHudAmmo(_hud);
+
 	_hud->StateChanged( gameLocal.time );
 }
 

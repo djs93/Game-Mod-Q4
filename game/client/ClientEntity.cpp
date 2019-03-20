@@ -544,8 +544,6 @@ void rvClientEntity::InitDefaultPhysics( const idVec3 &origin, const idMat3 &axi
 		}
 	}
 	
-	common->Printf("Does gameLocal.entities[ENTITYNUM_CLIENT] exist? %s\n", gameLocal.entities[ENTITYNUM_CLIENT] ? "YES!" : "NO!");
-	common->Printf("what is gameLocal.entities[ENTITYNUM_CLIENT]: %s\n", gameLocal.entities[ENTITYNUM_CLIENT]->GetClassType().classname);
 	defaultPhysicsObj.SetSelf( gameLocal.entities[ENTITYNUM_CLIENT] );
 	defaultPhysicsObj.SetClipModel( clipModel, 1.0f );
 	defaultPhysicsObj.SetOrigin( origin );
