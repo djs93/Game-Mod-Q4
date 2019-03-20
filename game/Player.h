@@ -832,6 +832,10 @@ public:
 	bool					ability1Upgraded;
 	bool					ability2Upgraded;
 
+	idUserInterface*		selectionGui;
+
+	void					SetClass(const char* className);
+
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
 
@@ -1143,6 +1147,8 @@ private:
 
 	//  mekberg: don't supress showing new objectives anymore
 	void					Event_AllowNewObjectives	( void );
+
+	void					Event_StartSelection		(void);
 
 	// twhitaker: death shader
 	void					UpdateDeathShader			( bool state_hitch );

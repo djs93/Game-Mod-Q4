@@ -116,6 +116,7 @@ const idEventDef EV_Player_DisableObjectives( "disableObjectives" );
 
 // mekberg: don't suppress showing of new objectives anymore
 const idEventDef EV_Player_AllowNewObjectives( "<allownewobjectives>" );
+const idEventDef EV_Player_StartSelection("startSelection");
 
 // RAVEN END
 
@@ -166,6 +167,8 @@ CLASS_DECLARATION( idActor, idPlayer )
 	EVENT( EV_Player_SetExtraProjPassEntity,idPlayer::Event_SetExtraProjPassEntity )
 //MCG: direct damage
 	EVENT( EV_Player_DamageEffect,			idPlayer::Event_DamageEffect )
+
+	EVENT(EV_Player_StartSelection, idPlayer::Event_StartSelection)
 END_CLASS
 
 // RAVEN BEGIN
@@ -1892,6 +1895,7 @@ void idPlayer::Spawn( void ) {
 
 		buygui = uiManager->FindGui("guis/buymenu.gui", true, false, true);
 		mainMenuGui = uiManager->FindGui("guis/mainmenu.gui", true, false, true);
+		selectionGui = uiManager->FindGui("guis/classselector.gui", true, false, true);
 
 		// load cursor
 		GetCursorGUI();
@@ -3020,6 +3024,12 @@ void idPlayer::SavePersistantInfo( void ) {
 	playerInfo.SetBool("warmogs_active", warmogsActive);
 	playerInfo.SetBool("runaans_active", runaansActive);
 	playerInfo.SetFloat("buyCash", buyMenuCash);
+	playerInfo.SetInt("level", level);
+	playerInfo.SetInt("exp", exp);
+	playerInfo.SetInt("nextLevelExp", nextLevelExp);
+	playerInfo.SetInt("upgradePoints", upgradePoints);
+	playerInfo.SetBool("ability1Upgraded", ability1Upgraded);
+	playerInfo.SetBool("ability2Upgraded", ability2Upgraded);
 }
 
 /*
@@ -3047,7 +3057,12 @@ void idPlayer::RestorePersistantInfo( void ) {
 	warmogsActive = spawnArgs.GetBool("warmogs_active", "false");
 	runaansActive = spawnArgs.GetBool("runaans_active", "false");
 	buyMenuCash = spawnArgs.GetFloat("buyCash", "0.0");
-	//ADD LEVELS AND EXP HERE
+	level = spawnArgs.GetInt("level", "1");
+	exp = spawnArgs.GetInt("exp", "0");
+	nextLevelExp = spawnArgs.GetInt("nextLevelExp", "0");
+	upgradePoints = spawnArgs.GetInt("upgradePoints", "0");
+	ability1Upgraded = spawnArgs.GetBool("ability1Upgraded", "false");
+	ability2Upgraded = spawnArgs.GetBool("ability2Upgraded", "false");
 }
 
 /*
@@ -3430,9 +3445,9 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 
 	_hud->SetStateBool( "player_ammo_empty", ( ammoamount == 0 ) );
 	*/
-	common->Printf("Setting ammo percent to: %f\n", (float)exp / (float)nextLevelExp);
+	//common->Printf("Setting ammo percent to: %f\n", (float)exp / (float)nextLevelExp);
 	_hud->SetStateFloat("player_ammopct", (float)exp / (float)nextLevelExp);
-	common->Printf("Setting totalammo to: %i\n", level);
+	//common->Printf("Setting totalammo to: %i\n", level);
 	_hud->SetStateString("player_ammo", "-1");
 	_hud->SetStateInt("player_totalammo", level);
 }
@@ -3509,7 +3524,7 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 	
 	int index = 0;
 	int idealIndex = 0;
-	idUserInterface * hud = idPlayer::hud;
+	idUserInterface * hud = idPlayer::defaultHud;
 	idUserInterface * mphud = idPlayer::mphud;
 	idUserInterface * cursor = idPlayer::cursor;
 
@@ -3525,7 +3540,7 @@ void idPlayer::UpdateHudWeapon( int displayWeapon ) {
 		idPlayer *p = gameLocal.GetLocalPlayer();
 		if ( p->spectating && p->spectator == entityNumber ) {
 			assert( p->hud && p->mphud );
-			hud = p->hud;
+			hud = p->defaultHud;
 			mphud = p->mphud;
 			cursor = p->GetCursorGUI();
 		}
@@ -5347,6 +5362,7 @@ idPlayer::FindInventoryItem
 idDict *idPlayer::FindInventoryItem( const char *name ) {
 	for ( int i = 0; i < inventory.items.Num(); i++ ) {
 		const char *iname = inventory.items[i]->GetString( "inv_name" );
+		common->Printf("Item in inventory: %s\n", iname);
 		if ( iname && *iname ) {
 			if ( idStr::Icmp( name, iname ) == 0 ) {
 				return inventory.items[i];
@@ -5364,7 +5380,11 @@ idPlayer::RemoveInventoryItem
 void idPlayer::RemoveInventoryItem( const char *name ) {
 	idDict *item = FindInventoryItem(name);
 	if ( item ) {
+		common->Printf("Removing %s\n", name);
 		RemoveInventoryItem( item );
+	}
+	else{
+		common->Printf("No item \"%s\" in inventory\n", name);
 	}
 }
 
@@ -6327,7 +6347,7 @@ void idPlayer::Weapon_GUI( void ) {
 		if ( ui ) {
  			ev = sys->GenerateMouseButtonEvent( 1, ( usercmd.buttons & BUTTON_ATTACK ) != 0 );
 			command = ui->HandleEvent( &ev, gameLocal.time, &updateVisuals );
-			common->Printf("WeaponGUI mouse command: %s\n", command);
+			//common->Printf("WeaponGUI mouse command: %s\n", command);
 			if ( updateVisuals && focusEnt && ui == focusUI ) {
 				focusEnt->UpdateVisuals();
 			}
@@ -6338,10 +6358,10 @@ void idPlayer::Weapon_GUI( void ) {
 			return;
 		}
 		if ( focusEnt ) {
-			common->Printf("Handling command in if(focusEnt)\n");
+			//common->Printf("Handling command in if(focusEnt)\n");
 			HandleGuiCommands( focusEnt, command );
 		} else {
-			common->Printf("Handling command in else\n");
+			//common->Printf("Handling command in else\n");
 			HandleGuiCommands( this, command );
 		}
 	}
@@ -9675,7 +9695,7 @@ void idPlayer::Think( void ) {
 	// if we have an active gui, we will unrotate the view angles as
 	// we turn the mouse movements into gui events
 	idUserInterface *gui = ActiveGui();
-	if (hud->Name() == buygui->Name() || hud->Name() == mainMenuGui->Name()){
+	if (hud->Name() == buygui->Name() || hud->Name() == mainMenuGui->Name() || hud->Name()==selectionGui->Name()){
 		//hud->SetCursor(usercmd.mx, usercmd.my);
 		RouteGuiMouse(hud);
 	}
@@ -11402,6 +11422,21 @@ void idPlayer::Event_SetExtraProjPassEntity( idEntity* _extraProjPassEntity ) {
 
 /*
 =============
+idPlayer::Event_StartSelection
+=============
+*/
+void idPlayer::Event_StartSelection() {
+	hud = selectionGui;
+	hud->Redraw(gameLocal.time);
+	hud->Activate(true, gameLocal.time);
+	hud->HandleNamedEvent("update_buymenu");
+	hud->SetStateBool("gameDraw", true);
+	focusType = FOCUS_GUI;
+	focusUI = hud;
+}
+
+/*
+=============
 idPlayer::AddProjectilesFired
 =============
 */
@@ -11705,7 +11740,7 @@ void idPlayer::Event_SelectWeapon( const char *weaponName ) {
 	hiddenWeapon = false;
 	idealWeapon = weaponNum;
 
- 	UpdateHudWeapon();
+	UpdateHudWeapon(idealWeapon);
 }
 
 /*
@@ -14345,6 +14380,46 @@ void idPlayer::LevelUp(){
 	//let player upgrade ability in shop
 	if (level < 4){ //get two ability upgrades at level 2 and 3
 		upgradePoints++;
+	}
+}
+
+/*
+===============
+idPlayer::SetClass
+Sets the players class and gives them the appropriate weapons
+===============
+*/
+void idPlayer::SetClass(const char* className){
+	if (!idStr::Icmp(className, "tank")){
+		GiveItem("weapon_blaster");
+		GiveItem("weapon_machinegun");
+	}
+	else if (!idStr::Icmp(className, "assassin")){
+		GiveItem("weapon_shotgun");
+		GiveItem("weapon_hyperblaster");
+		idealWeapon = 2;
+		UpdateHudWeapon();
+	}
+	else if (!idStr::Icmp(className, "mage")){
+		GiveItem("weapon_grenadelauncher");
+		GiveItem("weapon_nailgun");
+		idealWeapon = 4;
+		UpdateHudWeapon();
+	}
+	else if (!idStr::Icmp(className, "marksman")){
+		GiveItem("weapon_rocketlauncher");
+		GiveItem("weapon_railgun");
+		idealWeapon = 6;
+		UpdateHudWeapon();
+	}
+	else if (!idStr::Icmp(className, "support")){
+		GiveItem("weapon_lightninggun");
+		GiveItem("weapon_dmg");
+		idealWeapon = 8;
+		UpdateHudWeapon();
+	}
+	else{
+		common->Printf("Invalid SetClass class %s\n", className);
 	}
 }
 

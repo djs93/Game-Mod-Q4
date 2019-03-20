@@ -1124,4 +1124,11 @@
 	"#str_224005"	"Ability Upgrades"
 	"#str_224006"	"Upgrade First Ability"
 	"#str_224007"	"Upgrade Second Ability"
+	"#str_224008"	"Tank"
+	"#str_224009"	"Assassin"
+	"#str_224010"	"Mage"
+	"#str_224011"	"Marksman"
+	"#str_224012"	"Support"
+	"#str_224013"	"Class Selection"
+	"#str_224014"	"Select a class:"
 }

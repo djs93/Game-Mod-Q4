@@ -1909,6 +1909,7 @@ void main()
 	//$normalDoor_frame_4.setShaderParm( 7 , 0 );
 	
 	$player1.setHealth( 72 );
+	$player1.startSelection();
 }
 
 }	//end namespace : map_airdefense1
