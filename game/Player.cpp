@@ -1354,6 +1354,11 @@ idPlayer::idPlayer() {
 	duskbladeActive = false;
 	warmogsActive = false;
 	runaansActive = false;
+
+	exp = 0;
+	nextLevelExp = spawnArgs.GetInt("exp_to_level_two", "160");
+	level = spawnArgs.GetInt("starting_level", "1");
+	upgradePoints = 0;
 }
 
 /*
@@ -14257,6 +14262,7 @@ float idPlayer::getDmgMult(){
 	if (duskbladeActive){
 		mult += (spawnArgs.GetFloat("deskblade_dmg_mult", "1.3") - 1.0f);
 	}
+	mult += spawnArgs.GetFloat("dmg_per_level", "0.05")*level;
 	return mult;
 }
 
@@ -14274,7 +14280,39 @@ float idPlayer::getCDMult(){
 	if (runaansActive){
 		mult -= (1.0f - spawnArgs.GetFloat("runaans_cd_mult", "0.6"));
 	}
+	mult -= spawnArgs.GetFloat("cdr_per_level", "0.05")*level;
 	return mult;
+}
+
+/*
+===============
+idPlayer::GiveExp
+Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+===============
+*/
+void idPlayer::GiveExp(int experience){
+	exp += experience;
+	if (exp >= nextLevelExp && level<spawnArgs.GetFloat("max_level", "18")){
+		exp = exp - nextLevelExp;//set exp to spillover
+		LevelUp();//level up
+	}
+	
+}
+
+/*
+===============
+idPlayer::LevelUp
+Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+===============
+*/
+void idPlayer::LevelUp(){
+	//increase damage and attack speed slightly through level increment
+	level++;
+	nextLevelExp *= spawnArgs.GetFloat("level_ramp", "2.0");
+	//let player upgrade ability in shop
+	if (level < 4){ //get two ability upgrades at level 2 and 3
+		upgradePoints++;
+	}
 }
 
 // RITUAL END

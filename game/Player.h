@@ -823,6 +823,13 @@ public:
 	float					getDmgMult();
 	float					getCDMult();
 
+	int						exp;
+	void					GiveExp(int experience);
+	void					LevelUp();
+	int						level;
+	int						nextLevelExp;
+	int						upgradePoints;
+
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );
 

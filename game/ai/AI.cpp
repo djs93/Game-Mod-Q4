@@ -1616,7 +1616,9 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 
 	if (attacker == gameLocal.GetLocalPlayer() && !aifl.dead){
 		gameLocal.GetLocalPlayer()->GiveCash(spawnArgs.GetInt("health") * 3);
-		common->Printf("Giving %i\n", spawnArgs.GetInt("health") * 3);
+		common->Printf("Giving %i gold\n", spawnArgs.GetInt("health") * 3);
+		gameLocal.GetLocalPlayer()->GiveExp(spawnArgs.GetInt("health"));
+		common->Printf("Giving %i exp\n", spawnArgs.GetInt("health"));
 	}
 
 	if ( g_debugDamage.GetBool() ) {
