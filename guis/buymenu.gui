@@ -2146,7 +2146,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_ammorefill
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_ammorefill"
 				textscale	.28
@@ -2158,7 +2158,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_222007"
+				text	"#str_224006"
 				textscale	.28
 				font	"fonts/marine"
 			}
@@ -2232,7 +2232,7 @@ windowDef Desktop
 			windowDef buyButtonPrice_lightarmor
 			{
 				rect	"desktop::buyButtonVisuals_priceOffset_x","desktop::buyButtonVisuals_priceOffset_y","desktop::buyButtonVisuals_price_width", "desktop::buyButtonVisuals_price_height"
-				visible	1
+				visible	0
 				forecolor	1,1,1,0.8
 				text	"gui::price_lightarmor"
 				textscale	.28
@@ -2244,7 +2244,7 @@ windowDef Desktop
 				rect	"desktop::buyButtonVisuals_textOffset_x","desktop::buyButtonVisuals_textOffset_y","desktop::buyButtonVisuals_text_width", "desktop::buyButtonVisuals_text_height"
 				visible	1
 				forecolor	1,1,1,0.8
-				text	"#str_222008"
+				text	"#str_224007"
 				textscale	.28
 				font	"fonts/marine"
 			}
