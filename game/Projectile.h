@@ -67,6 +67,7 @@ public :
 	
 protected:
 	void					SpawnImpactEntities(const trace_t& collision, const idVec3 projectileDirection);
+	void					SpawnVelKozImpactEntities(const idVec3 endpos, const idVec3 projectileDirection);
 
 
 	idEntityPtr<idEntity>	owner;

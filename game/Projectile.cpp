@@ -1009,6 +1009,76 @@ void idProjectile::SpawnImpactEntities(const trace_t& collision, const idVec3 ve
 	}
 }
 
+void idProjectile::SpawnVelKozImpactEntities(const idVec3 endpos, const idVec3 velocity)
+{
+	trace_t collision = trace_t();
+	collision.endpos = endpos;
+	collision.endAxis = GetPhysics()->GetAxis();
+	collision.fraction = 1.0;
+	collision.c.normal = idVec3(0, 0, 1);
+	if (impactEntity.Length() == 0 || numImpactEntities == 0)
+		return;
+
+	const idDict* impactEntityDict = gameLocal.FindEntityDefDict(impactEntity);
+	if (impactEntityDict == NULL)
+		return;
+
+	idVec3 tempDirection;
+	idVec3 direction;
+	direction.Zero();
+
+	idVec3 up = collision.c.normal;
+
+	//Calculate the axes for that are oriented to the impact point. 
+	idMat3 impactAxes;
+
+	idVec3 right = velocity.Cross(up);
+	idVec3 forward = up.Cross(right);
+
+	right.Normalize();
+	forward.Normalize();
+	impactAxes[0] = forward;
+	impactAxes[1] = right;
+	impactAxes[2] = up;
+
+	//Calculate the reflection vector by calculating the forward component and up component of the projectile direction
+	//idVec3 reflectionVelocity = (forward * (velocity*0.33f * forward));// - (up * (velocity * up));
+	idVec3 reflectionVelocity = up * 0.01f;
+
+	//The algorithm below will launch entities at a random pitch and somewhat random yaw.
+	//The yaw is calculated by dividing 360 by the number of entities to spawn. This creates
+	//a distribution slice. Then using the slice percentage, this will determine how much of the
+	//slice to use.
+	//This creates a random,but somewhat even coverage of the circle.
+
+	//Calculate the slice size and pick a random start position.
+	int sliceSize = 360 / numImpactEntities;
+	int startPosition = rvRandom::irand(0, 360);
+
+	//Move the origin away from the collision point. This prevents the projectiles
+	//from colliding with the surface.
+	idVec3 origin = collision.endpos;
+	origin += 10.0f * collision.c.normal;
+	for (int i = 0; i < numImpactEntities; i++)
+	{
+		idProjectile* spawnProjectile = NULL;
+		gameLocal.SpawnEntityDef(*impactEntityDict, (idEntity**)&spawnProjectile);
+		if (spawnProjectile != NULL)
+		{
+			if (i % 2 == 0){
+				direction = right;
+			}
+			else{
+				direction = -right;
+			}
+
+			spawnProjectile->SetOwner(owner);
+
+			spawnProjectile->Launch(origin, direction, reflectionVelocity);
+		}
+	}
+}
+
 /*
 =================
 idProjectile::DefaultDamageEffect
@@ -1148,9 +1218,12 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 		normal = collision ? collision->c.normal : idVec3( 0, 0, 1 );
 	}
 	endpos = ( collision ) ? collision->endpos : GetPhysics()->GetOrigin();
+	
+	if (!collision && !idStr::Icmp(spawnArgs.GetString("type"),"velkozRocket")){
+		SpawnVelKozImpactEntities(endpos, GetPhysics()->GetLinearVelocity());
+	}
 
 	removeTime = spawnArgs.GetInt( "remove_time", "1500" );
-
 	// play sound
 	StopSound( SND_CHANNEL_BODY, false );
 	StartSound( sndExplode, SND_CHANNEL_BODY, 0, false, NULL );
