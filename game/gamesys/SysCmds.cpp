@@ -3034,6 +3034,17 @@ void Cmd_AddCash_f(const idCmdArgs& args){
 	player->GiveCash(delta);
 }
 
+/*
+===============
+Cmd_AddCash_f
+Gives the player additional buymode credits
+===============
+*/
+void Cmd_LevelUp_f(const idCmdArgs& args){
+	idPlayer *player = gameLocal.GetLocalPlayer();
+	player->LevelUp();
+}
+
 #ifndef _FINAL
 void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 	idBitMsg	outMsg;
@@ -3246,6 +3257,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 // RITUAL END
 
 	cmdSystem->AddCommand("addCash",				Cmd_AddCash_f,				CMD_FL_GAME,				"Give the player additional buy mode credits");
+	cmdSystem->AddCommand("levelup",				Cmd_LevelUp_f,				CMD_FL_GAME,				"Level up the player one level");
 }
 
 /*

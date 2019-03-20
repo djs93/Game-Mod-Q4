@@ -829,6 +829,8 @@ public:
 	int						level;
 	int						nextLevelExp;
 	int						upgradePoints;
+	bool					ability1Upgraded;
+	bool					ability2Upgraded;
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

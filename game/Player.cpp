@@ -1359,6 +1359,8 @@ idPlayer::idPlayer() {
 	nextLevelExp = spawnArgs.GetInt("exp_to_level_two", "160");
 	level = spawnArgs.GetInt("starting_level", "1");
 	upgradePoints = 0;
+	ability1Upgraded = false;
+	ability2Upgraded = false;
 }
 
 /*
@@ -8219,6 +8221,9 @@ int idPlayer::GetItemCost( const char* itemName ) {
 		assert( false );
 		return 99999;
 	}
+	if (!idStr::Icmp(itemName, "ammorefill") || !idStr::Icmp(itemName, "item_armor_small")){
+		return 0;
+	}
 	return itemCosts->dict.GetInt( itemName, "99999" );
 }
 
@@ -8303,7 +8308,13 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	}
 	else if( itemNameStr == "item_armor_small" )
 	{
-		return IBS_NOT_ALLOWED;//Don't want armor to function
+		if (ability2Upgraded){
+			return IBS_ALREADY_HAVE;
+		}
+		if (upgradePoints > 0){ 
+			return IBS_CAN_BUY; 
+		}
+		return IBS_CANNOT_AFFORD;
 		//if (inventory.armor >= 190){
 			//common->Printf("In ItemBuyStatus, already have small armor\n");
 		//	return IBS_ALREADY_HAVE;
@@ -8339,7 +8350,13 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	}
 	else if( itemNameStr == "ammorefill" )
 	{
-		return IBS_NOT_ALLOWED;//Don't want ammo refill to function
+		if (ability1Upgraded){
+			return IBS_ALREADY_HAVE;
+		}
+		if (upgradePoints > 0){
+				return IBS_CAN_BUY;
+		}
+		return IBS_CANNOT_AFFORD;
 		//if (inventory.carryOverWeapons & CARRYOVER_FLAG_AMMO){
 			//common->Printf("In ItemBuyStatus, already have (carryOverWeapons)\n");
 		//	return IBS_ALREADY_HAVE;
@@ -8561,6 +8578,14 @@ bool idPlayer::AttemptToBuyItem( const char* itemName )
 		else{
 			GiveStuffToPlayer(this, itemName, NULL);
 		}
+	}
+	else if (itemNameStr == "ammorefill"){
+		ability1Upgraded = true;
+		upgradePoints--;
+	}
+	else if (itemNameStr == "item_armor_small"){
+		ability2Upgraded = true;
+		upgradePoints--;
 	}
 	else{
 		GiveStuffToPlayer( this, itemName, NULL );
