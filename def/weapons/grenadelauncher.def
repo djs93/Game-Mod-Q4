@@ -84,6 +84,7 @@ entityDef weapon_grenadelauncher
 	
 	"weaponname"				"Rocket Launcher"
 	"def_projectile"			"projectile_rocket"
+	"def_altprojectile"			"projectile_rocket_upgrade"
 	"ammoType"					"ammo_rocketlauncher"
 	"clipSize"					"0"
 	"ammoRequired"				"0"
@@ -437,6 +438,14 @@ entityDef projectile_rocket_homing
 		
 	"turn_max"					"360"
 	"clamp_dist"				"10000"
+}
+
+entityDef projectile_rocket_upgrade
+{
+	"inherit"					"projectile_rocket"
+	"def_impactEntity"			"projectile_rocket"
+	"type"						"velkozRocketUpgrade"
+	
 }
 
 //--------------------------------------------------------------------------------------------------------------------
