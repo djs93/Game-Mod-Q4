@@ -148,39 +148,37 @@ void rvWeaponRocketLauncher::Think ( void ) {
 
 	// IF no guide range is set then we dont have the mod yet	
 	if ( !guideRange ) {
+		common->Printf("No Guide Range\n");
 		return;
 	}
 	
-	if ( !wsfl.zoom ) {
-		if ( guideEffect ) {
-			guideEffect->Stop();
-			guideEffect = NULL;
-		}
-
-		for ( i = guideEnts.Num() - 1; i >= 0; i -- ) {
-			idGuidedProjectile* proj = static_cast<idGuidedProjectile*>(guideEnts[i].GetEntity());
-			if ( !proj || proj->IsHidden ( ) ) {
-				guideEnts.RemoveIndex ( i );
-				continue;
-			}
-			
-			// If the rocket is still guiding then stop the guide and slow it down
-			if ( proj->GetGuideType ( ) != idGuidedProjectile::GUIDE_NONE ) {
-				proj->CancelGuide ( );				
-				proj->SetSpeed ( guideSpeedFast, (1.0f - (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime );
-			}
-		}
-
-		return;
-	}
+	//if ( !wsfl.zoom ) {
+	//	if ( guideEffect ) {
+	//		guideEffect->Stop();
+	//		guideEffect = NULL;
+	//	}
+	//
+	//	for ( i = guideEnts.Num() - 1; i >= 0; i -- ) {
+	//		idGuidedProjectile* proj = static_cast<idGuidedProjectile*>(guideEnts[i].GetEntity());
+	//		if ( !proj || proj->IsHidden ( ) ) {
+	//			guideEnts.RemoveIndex ( i );
+	//			continue;
+	//		}
+	//		
+	//		// If the rocket is still guiding then stop the guide and slow it down
+	//		if ( proj->GetGuideType ( ) != idGuidedProjectile::GUIDE_NONE ) {
+	//			proj->CancelGuide ( );				
+	//			proj->SetSpeed ( guideSpeedFast, (1.0f - (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime );
+	//		}
+	//	}
+	//
+	//	return;
+	//}
 						
 	// Cast a ray out to the lock range
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
-	gameLocal.TracePoint(	owner, tr, 
-							playerViewOrigin, 
-							playerViewOrigin + playerViewAxis[0] * guideRange, 
-							MASK_SHOT_RENDERMODEL, owner );
+	//gameLocal.TracePoint(owner, tr, playerViewOrigin, playerViewOrigin + playerViewAxis[0] * guideRange, MASK_SHOT_RENDERMODEL, owner );
 // RAVEN END
 	
 	for ( i = guideEnts.Num() - 1; i >= 0; i -- ) {
@@ -191,18 +189,24 @@ void rvWeaponRocketLauncher::Think ( void ) {
 		}
 		
 		// If the rocket isnt guiding yet then adjust its speed back to normal
-		if ( proj->GetGuideType ( ) == idGuidedProjectile::GUIDE_NONE ) {
-			proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow) * guideAccelTime );
+		//if ( proj->GetGuideType ( ) == idGuidedProjectile::GUIDE_NONE ) {
+		//	proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow) * guideAccelTime );
+		//}
+		common->Printf("Emeny being guided to: %s\n", owner->ClosestEnemyToPoint(proj->GetPhysics()->GetOrigin(), 500.0f, false, true) ? "something" : "none");
+		idActor* enemy = owner->ClosestEnemyToPoint(proj->GetPhysics()->GetOrigin(), 500.0f);
+		if (enemy){
+			idVec3 pos = enemy->GetPhysics()->GetCenterMass();
+			pos.z = pos.z + 5;
+			proj->GuideTo(pos);
 		}
-		proj->GuideTo ( tr.endpos );				
 	}
 	
-	if ( !guideEffect ) {
-		guideEffect = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_guide" ), tr.endpos, tr.c.normal.ToMat3(), true, vec3_origin, true );
-	} else {
-		guideEffect->SetOrigin ( tr.endpos );
-		guideEffect->SetAxis ( tr.c.normal.ToMat3() );
-	}
+	//if ( !guideEffect ) {
+	//	guideEffect = gameLocal.PlayEffect ( gameLocal.GetEffect ( spawnArgs, "fx_guide" ), tr.endpos, tr.c.normal.ToMat3(), true, vec3_origin, true );
+	//} else {
+	//	guideEffect->SetOrigin ( tr.endpos );
+	//	guideEffect->SetAxis ( tr.c.normal.ToMat3() );
+	//}
 }
 
 /*
@@ -215,12 +219,14 @@ void rvWeaponRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
 
 	// Double check that its actually a guided projectile
 	if ( !proj || !proj->IsType ( idGuidedProjectile::GetClassType() ) ) {
+		common->Printf("Projectile not a guided projectile!\n");
 		return;
 	}
 
 	// Launch the projectile
 	idEntityPtr<idEntity> ptr;
 	ptr = proj;
+	common->Printf("Appending projectile to guided projectiles\n");
 	guideEnts.Append ( ptr );	
 }
 
@@ -424,7 +430,7 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
 			}		
-			if ( gameLocal.time > nextAttackTime && wsfl.attack && ( gameLocal.isClient || AmmoInClip ( ) ) ) {
+			if ( gameLocal.time > nextAttackTime && wsfl.attack && ( gameLocal.isClient || AmmoInClip ( ) ) && owner->enemyList.Num()>0) {
 				SetState ( "Fire", 2 );
 				return SRESULT_DONE;
 			}
@@ -446,12 +452,13 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE)* owner->getCDMult());
-			Attack(false, 1, spread, 0, 1.0f * owner->getDmgMult());
+			Attack(false, owner->ability1Upgraded ? spawnArgs.GetInt("kaisa_bullets_upgraded", "10") : spawnArgs.GetInt("kaisa_bullets_base", "6"), spread, 0, 1.0f * owner->getDmgMult());
+			//Attack(false, 1, 0, 0, 1.0f * owner->getDmgMult());
 			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:			
-			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
+			if (wsfl.attack && gameLocal.time >= nextAttackTime && (gameLocal.isClient || AmmoInClip()) && !wsfl.lowerWeapon && owner->enemyList.Num()>0) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
 			}

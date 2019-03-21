@@ -685,7 +685,7 @@ void rvWeapon::Spawn ( void ) {
 	viewModel->PostGUIEvent( "weapon_init" );
 	viewModel->PostGUIEvent( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
-		viewModel->PostGUIEvent( "weapon_noammo" );
+		//viewModel->PostGUIEvent( "weapon_noammo" );
 	}
 
 	stateThread.SetName( va("%s_%s_%s", owner->GetName(), viewModel->GetName ( ), spawnArgs.GetString("classname") ) );
@@ -2438,7 +2438,7 @@ void rvWeapon::SetClip ( int amount ) {
 	
 	viewModel->PostGUIEvent ( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
-		viewModel->PostGUIEvent ( "weapon_noammo" );
+		//viewModel->PostGUIEvent ( "weapon_noammo" );
 	}
 }
 
@@ -2486,7 +2486,7 @@ void rvWeapon::AddToClip ( int amount ) {
 	
 	viewModel->PostGUIEvent ( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
-		viewModel->PostGUIEvent ( "weapon_noammo" );
+		//viewModel->PostGUIEvent ( "weapon_noammo" );
 	}
 }
 
@@ -2586,7 +2586,7 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 	// Inform the gui of the ammo change
 	viewModel->PostGUIEvent ( "weapon_ammo" );
 	if ( ammoClip == 0 && AmmoAvailable() == 0 ) {
-		viewModel->PostGUIEvent ( "weapon_noammo" );
+		//viewModel->PostGUIEvent ( "weapon_noammo" );
 	}
 	
 	// The attack is either a hitscan or a launched projectile, do that now.

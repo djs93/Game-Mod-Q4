@@ -2018,6 +2018,9 @@ idActor::ClosestEnemyToPoint
 ================
 */
 idActor *idActor::ClosestEnemyToPoint( const idVec3 &pos, float maxRange, bool returnFirst, bool checkPVS ) {
+	if (enemyList.Num() == 0){
+		return NULL;
+	}
 	idActor		*ent;
 	idActor		*bestEnt;
 	float		bestDistSquared;
@@ -2028,39 +2031,58 @@ idActor *idActor::ClosestEnemyToPoint( const idVec3 &pos, float maxRange, bool r
 	//just to supress the compiler warning
     pvs.i = 0;
 
+	common->Printf("14\n");
+
 	if ( checkPVS ) {
+		common->Printf("15\n");
 		// Setup our local variables used in the search
 		pvs	 = gameLocal.pvs.SetupCurrentPVS( GetPVSAreas(), GetNumPVSAreas() );
 	}
 
+	common->Printf("16\n");
 	bestDistSquared = maxRange?(maxRange*maxRange):idMath::INFINITY;
+	common->Printf("17\n");
 	bestEnt = NULL;
+	common->Printf("18\n");
 	for( ent = enemyList.Next(); ent != NULL; ent = ent->enemyNode.Next() ) {
+		common->Printf("Enemy: %s\n", ent->GetName() ? ent->GetName():"no name");
 		if ( ent->fl.hidden ) {
 			continue;
 		}
+		common->Printf("1\n");
 		delta = ent->GetPhysics()->GetOrigin() - pos;
+		common->Printf("2\n");
 		distSquared = delta.LengthSqr();
+		common->Printf("3\n");
 		if ( distSquared < bestDistSquared ) {
+			common->Printf("4\n");
 			if ( checkPVS ) {
 				// If this enemy isnt in the same pvps then use them as a backup
+				common->Printf("5\n");
 				if ( pvs.i > 0 
 					&& pvs.i < MAX_CURRENT_PVS
 					&& !gameLocal.pvs.InCurrentPVS( pvs, ent->GetPVSAreas(), ent->GetNumPVSAreas() ) ) {
+					common->Printf("6\n");
 					continue;
 				}
 			}
+			common->Printf("7\n");
 			bestEnt = ent;
+			common->Printf("8\n");
 			bestDistSquared = distSquared;
+			common->Printf("9\n");
 			if ( returnFirst ) {
+				common->Printf("10\n");
 				break;
 			}
 		}
 	}
-
+	common->Printf("11\n");
 	if ( checkPVS ) {
+		common->Printf("12\n");
 		gameLocal.pvs.FreeCurrentPVS( pvs );
 	}
+	common->Printf("13\n");
 	return bestEnt;
 }
 

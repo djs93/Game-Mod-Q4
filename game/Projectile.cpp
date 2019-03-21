@@ -760,7 +760,6 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 // RAVEN END
  
 	//Spawn any impact entities if necessary.
-	common->Printf("What is the type of this projectile?: %s\n", spawnArgs.GetString("type", ""));
 	if (!idStr::Icmp(spawnArgs.GetString("type",""), "velkozRocket")){
 		SpawnVelKozImpactEntities(collision.endpos, velocity);
 	}
