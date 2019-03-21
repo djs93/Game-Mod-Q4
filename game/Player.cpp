@@ -10332,6 +10332,10 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		attacker = gameLocal.world;
 	}
 
+	if (this == attacker){
+		return;
+	}
+
 	// MCG: player doesn't take friendly fire damage, except from self!
 	if ( !gameLocal.isMultiplayer && attacker != this ) {
 		if ( attacker->IsType ( idActor::GetClassType() ) && static_cast<idActor*>(attacker)->team == team ) {

@@ -403,7 +403,7 @@ stateResult_t rvWeaponNailgun::State_Fire(const stateParms_t& parms) {
 		}
 		else {
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE)* owner->getCDMult());
-			Attack(false, 1, spread, 0, 1.0f * owner->getDmgMult());
+			Attack(owner->ability2Upgraded, 1, spread, 0, 1.0f * owner->getDmgMult());
 
 			int animNum = viewModel->GetAnimator()->GetAnim("fire");
 			if (animNum) {

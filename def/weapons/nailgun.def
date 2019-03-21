@@ -152,6 +152,7 @@ entityDef weapon_nailgun
 	"net_syncPhysics"			"1"
 
 	"snd_quaddamage"                        "weapon_quaddamage_fire"
+	"def_altprojectile"			"projectile_napalm_alt"
 }
 
 entityDef weapon_nailgun_mp
@@ -249,6 +250,7 @@ model weapon_nailgun_world
 
 entityDef projectile_napalm
 {
+	"type"						"ziggsNormal"
 	"spawnclass"				"idProjectile"
 	"size"						"7 7 7"
 	"cone"						"2"
@@ -271,6 +273,7 @@ entityDef projectile_napalm
 	"bounce_count"				"3"
 	"gravity"					"1.2"
 	"fuse"						"1.2"
+	"friendly_impact"			"0"
 								
 	"detonate_on_fuse"			"1"
 	"detonate_on_death"			"1"
@@ -319,13 +322,22 @@ entityDef projectile_napalm
 	"no_impact_prediction"		"1"
 }
 
+entityDef projectile_napalm_alt{
+	"inherit"					"projectile_napalm"
+	"type"						"ziggsUpgraded"
+	"bounce_count"				"5"
+	"fuse"						"2.1"
+	"def_impactEntity"			"impact_napalm_projectile_alt"
+}
+
 entityDef impact_napalm_projectile
 {
 	//"inherit"	"projectile_grenade"
 	"spawnclass"				"idProjectile"
 	"size"						"1 1 1"
 	"noshadows"					"1"
-	"clipmask_largeshot"		"0"
+	"noshadows"					"1"
+	"clipmask_largeshot"		"1"
 	"no_contents"				"0"
 
 	"model"						"models/weapons/napalmgun/flame_gun_globsmall.ase"
@@ -335,6 +347,7 @@ entityDef impact_napalm_projectile
 	"speed"						"1"
 	"gravity"					"1.2"
 	"remove_time"				"100"
+	"friendly_impact"			"0"
 
 	"angular_velocity"			"-10 5 1"
 
@@ -359,6 +372,79 @@ entityDef impact_napalm_projectile
 	"fx_teleport"				"effects/mp/item_teleport.fx"
 
 	"net_syncPhysics"			"1"
+}
+
+entityDef impact_napalm_projectile_alt
+{
+	"spawnclass"				"idProjectile"
+	"size"						"1 1 1"
+	"cone"						"2"
+	"noshadows"					"1"
+	"clipmask_largeshot"		"1"
+	"no_contents"				"0"
+
+	"model"						"models/weapons/napalmgun/flame_gun_globsmall.ase"
+	"def_damage"				"damage_napalmDirect"
+	"def_splash_damage"			"damage_napalmSplash"	
+
+	"speed"						"0"
+	"angular_velocity"			"-10 5 1"
+	"settle_duration"			"0.08"
+	
+	"linear_friction"			"0"
+	"angular_friction"			"0"
+	"contact_friction"			"10"
+	//"bounce"					".65"
+	//"bounce_count"				"3"
+	"gravity"					"1.2"
+	"fuse"						"0.9"
+	"friendly_impact"			"0"
+								
+	"detonate_on_fuse"			"1"
+	"detonate_on_death"			"1"
+	"detonate_on_world"			"0"
+	"detonate_on_actor"			"1"
+								
+	"impact_gib"				"1"
+	"decal_size"				"75"
+
+	"flyEffectAttenuateSpeed"	"200"
+	
+	"airBurst_desc"				"midair_"
+
+	"fx_fly"					"effects/weapons/napalmgun/flyburn.fx"
+	"fx_fly_mp_low"				"effects/weapons/napalmgun/flyburn_mp_low.fx"
+	"fx_impact_water"			"effects/ambient/splash_med.fx"
+
+	//"snd_ricochet"				"weapon_napalmgun_bounce"
+	
+	// These are the impact effects and the detonation effects.
+	//"fx_detonate"				"effects/weapons/napalmgun/detonate.fx"
+	//"fx_impact"				"effects/weapons/napalmgun/areaburn"
+	//"fx_impact_actor"			"effects/weapons/napalmgun/actorimpact"
+	
+	"fx_impact_actor"			"effects/weapons/rocketlauncher/detonate.fx"
+	"fx_impact"					"effects/weapons/napalmgun/impact.fx"
+	"fx_detonate"					"effects/weapons/napalmgun/detonate.fx"
+
+	//"delay_residual"				"1.5"
+	//"residual_time"					"6"
+	//"def_residual_damage"			"damage_lightTank_residualPlasma"	
+
+
+	//spawn impact entity information
+	//"def_impactEntity"			"impact_napalm_projectile"
+	//"numImpactEntities"			"1"
+	//"ieMinPitch"				"20"
+	//"ieMaxPitch"				"50"
+	//"ieSlicePercentage"			"1.00"
+	
+	"net_syncPhysics"			"1"
+
+	"fx_teleport_enter"			"effects/mp/item_teleport.fx"
+	"fx_teleport"				"effects/mp/item_teleport.fx"
+
+	"no_impact_prediction"		"1"
 }
 
 //--------------------------------------------------------------------------------------------------------------------
