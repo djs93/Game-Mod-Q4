@@ -73,7 +73,7 @@ entityDef weapon_grenadelauncher
 	"inv_start_ammo_rocketlauncher"	"10"
 	"inv_item"					"1"
 	"inv_icon"					"gfx/guis/hud/icons/item_rocket.tga"
-	"inv_name"					"#str_107409"	
+	"inv_name"					"#str_124000"	
 
 	"fireRate"					".8"
 	"reloadRate"				".8"

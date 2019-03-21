@@ -760,7 +760,12 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 // RAVEN END
  
 	//Spawn any impact entities if necessary.
-	SpawnImpactEntities(collision, velocity);
+	if (!idStr::Icmp(spawnArgs.GetString("type"), "velkozRocket")){
+		SpawnVelKozImpactEntities(collision.endpos, velocity);
+	}
+	else{
+		SpawnImpactEntities(collision, velocity);
+	}
 
 	//Apply any impact force if the necessary
 	//ApplyImpactForce(ent, collision, dir);

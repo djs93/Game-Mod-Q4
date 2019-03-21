@@ -2084,6 +2084,8 @@ void idPlayer::Spawn( void ) {
 //RITUAL END
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
+
+	nextLevelExp = spawnArgs.GetInt("exp_to_level_two", "160");
 }
 
 /*
@@ -14355,7 +14357,7 @@ float idPlayer::getCDMult(){
 /*
 ===============
 idPlayer::GiveExp
-Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+Gives experience to the player
 ===============
 */
 void idPlayer::GiveExp(int experience){
@@ -14370,13 +14372,15 @@ void idPlayer::GiveExp(int experience){
 /*
 ===============
 idPlayer::LevelUp
-Gets the overall multiplier for damage from non-powerup sources, mainly purchased "items"
+Levels up the player
 ===============
 */
 void idPlayer::LevelUp(){
 	//increase damage and attack speed slightly through level increment
 	level++;
-	nextLevelExp *= spawnArgs.GetFloat("level_ramp", "2.0");
+	common->Printf("Next level exp was %i\n", nextLevelExp);
+	nextLevelExp *= (int)spawnArgs.GetFloat("level_ramp", "2.0");
+	common->Printf("Next level exp is now %i\n", nextLevelExp);
 	//let player upgrade ability in shop
 	if (level < 4){ //get two ability upgrades at level 2 and 3
 		upgradePoints++;
