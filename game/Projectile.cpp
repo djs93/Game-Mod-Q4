@@ -760,7 +760,8 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 // RAVEN END
  
 	//Spawn any impact entities if necessary.
-	if (!idStr::Icmp(spawnArgs.GetString("type"), "velkozRocket")){
+	common->Printf("What is the type of this projectile?: %s\n", spawnArgs.GetString("type", ""));
+	if (!idStr::Icmp(spawnArgs.GetString("type",""), "velkozRocket")){
 		SpawnVelKozImpactEntities(collision.endpos, velocity);
 	}
 	else{
@@ -1224,7 +1225,7 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	}
 	endpos = ( collision ) ? collision->endpos : GetPhysics()->GetOrigin();
 	
-	if (!collision && !idStr::Icmp(spawnArgs.GetString("type"),"velkozRocket")){
+	if (!collision && !idStr::Icmp(spawnArgs.GetString("type",""),"velkozRocket")){
 		SpawnVelKozImpactEntities(endpos, GetPhysics()->GetLinearVelocity());
 	}
 

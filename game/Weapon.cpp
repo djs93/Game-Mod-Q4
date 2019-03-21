@@ -2631,30 +2631,40 @@ void rvWeapon::LaunchProjectiles ( idDict& dict, const idVec3& muzzleOrigin, con
 	
 	idVec3 dirOffset;
 	idVec3 startOffset;
-
+	float startAngle;
 	spawnArgs.GetVector( "dirOffset", "0 0 0", dirOffset );
 	spawnArgs.GetVector( "startOffset", "0 0 0", startOffset );
-
+	if (!idStr::Icmp(dict.GetString("type", ""), "volley")){
+		startAngle = -(dict.GetFloat("fire_cone_degrees", "60.0") / 2.0f);
+	}
 	for( i = 0; i < num_projectiles; i++ ) {
 		float	 ang;
 		float	 spin;
 		idVec3	 dir;
 		idBounds projBounds;
 		idVec3	 muzzle_pos;
-		
-		// Calculate a random launch direction based on the spread
-		ang = idMath::Sin( spreadRad * gameLocal.random.RandomFloat() );
-		spin = (float)DEG2RAD( 360.0f ) * gameLocal.random.RandomFloat();
-//RAVEN BEGIN
-//asalmon: xbox must use muzzle Axis for aim assistance
+
+		if (!idStr::Icmp(dict.GetString("type", ""), "volley")){
+			ang = startAngle + (float)i*(dict.GetFloat("fire_cone_degrees", "60.0") / (float)num_projectiles) + (dict.GetFloat("fire_cone_degrees", "60.0") / (float)num_projectiles)/2.0f;
+			ang = DEG2RAD(ang);
+			spin = 0;
+		}
+		else
+		{
+			// Calculate a random launch direction based on the spread
+			ang = idMath::Sin( spreadRad * gameLocal.random.RandomFloat() );
+			spin = (float)DEG2RAD( 360.0f ) * gameLocal.random.RandomFloat();
+			//RAVEN BEGIN
+			//asalmon: xbox must use muzzle Axis for aim assistance
+		}
 #ifdef _XBOX
-		dir = muzzleAxis[ 0 ] + muzzleAxis[ 2 ] * ( ang * idMath::Sin( spin ) ) - muzzleAxis[ 1 ] * ( ang * idMath::Cos( spin ) );
+		dir = muzzleAxis[0] + muzzleAxis[2] * (ang * idMath::Sin(spin)) - muzzleAxis[1] * (ang * idMath::Cos(spin));
 		dir += dirOffset;
 #else
-		dir = playerViewAxis[ 0 ] + playerViewAxis[ 2 ] * ( ang * idMath::Sin( spin ) ) - playerViewAxis[ 1 ] * ( ang * idMath::Cos( spin ) );
+		dir = playerViewAxis[0] + playerViewAxis[2] * (ang * idMath::Sin(spin)) - playerViewAxis[1] * (ang * idMath::Cos(spin));
 		dir += dirOffset;
 #endif
-//RAVEN END
+		//RAVEN END
 		dir.Normalize();
 	
 		// If a projectile entity has already been created then use that one, otherwise

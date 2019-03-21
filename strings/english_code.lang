@@ -740,6 +740,7 @@
 	//Game mod patches : #str_124000 - #str_124099
 	"#str_124000"	"Plasma Fission"
 	"#str_124001"	"Bouncing Bomb"
+	"#str_124002"	"Volley"
 	
 }
 
