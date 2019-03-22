@@ -540,12 +540,9 @@ idPhysics::SetOrigin
 void rvPhysics_Particle::SetOrigin( const idVec3 &newOrigin, int id ) {
 	idVec3 masterOrigin;
 	idMat3 masterAxis;
-	common->Printf("1\n");
 	current.localOrigin = newOrigin;
 	if ( hasMaster ) {
-		common->Printf("2\n");
 		self->GetMasterPosition( masterOrigin, masterAxis );
-		common->Printf("3\n");
 		current.origin = masterOrigin + newOrigin * masterAxis;
 	}
 	else {
@@ -553,10 +550,8 @@ void rvPhysics_Particle::SetOrigin( const idVec3 &newOrigin, int id ) {
 	}
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
-	common->Printf("4\n");
 	clipModel->Link( self, clipModel->GetId(), current.origin, clipModel->GetAxis() );
 // RAVEN END
-	common->Printf("5\n");
 	Activate();
 }
 

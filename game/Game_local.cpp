@@ -7748,6 +7748,20 @@ idEntity* idGameLocal::HitScan(
 						damage = hitscanDict.GetString ( "def_damage" );
 					}
 
+					if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_hyperblaster") && owner == GetLocalPlayer() && aiManager.ActorIsBehindActor((idActor*)owner, (idActor*)ent)){
+						if (GetLocalPlayer()->ability2Upgraded){
+							damage = hitscanDict.GetString("def_damage_backstab_upgraded");
+							common->Printf("Set upgraded backstab damage def!\n");
+						}
+						else{
+							damage = hitscanDict.GetString("def_damage_backstab");
+							common->Printf("Set normal backstab damage def!\n");
+						}
+					}
+					else if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_hyperblaster") && owner == GetLocalPlayer() && !aiManager.ActorIsBehindActor((idActor*)owner, (idActor*)ent)){
+						common->Printf("Using normal damage def!\n");
+					}
+
 					if ( damage && damage[0] ) {
 						// RAVEN BEGIN
 						// ddynerman: stats
@@ -7756,6 +7770,13 @@ idEntity* idGameLocal::HitScan(
 						}
 						// RAVEN END
 						ent->Damage( owner, owner, dir, damage, damageScale, hitJoint );
+						if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_lightninggun")){
+							static_cast<idAI *>(ent)->move.blockTime = gameLocal.time + 1500;	// Set Blocktime Timer
+							static_cast<idAI *>(ent)->move.fl.blocked = true;
+						}
+						else{
+
+						}
 					}
 
 					// Let the entity add its own damage effect

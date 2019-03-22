@@ -250,9 +250,7 @@ void idProjectile::Create( idEntity* _owner, const idVec3 &start, const idVec3 &
 
 	axis = dir.ToMat3();
 
-	common->Printf("Physics object?\n");
  	physicsObj.SetOrigin( start );
-	common->Printf("here?\n");
  	physicsObj.SetAxis( axis );
 
  	physicsObj.GetClipModel()->SetOwner( ignore ? ignore : _owner );
@@ -762,7 +760,7 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 // RAVEN END
  
 	//Spawn any impact entities if necessary.
-	common->Printf("Type: %s\n", spawnArgs.GetString("type", ""));
+	//common->Printf("Type: %s\n", spawnArgs.GetString("type", ""));
 	if (!idStr::Icmp(spawnArgs.GetString("type", ""), "velkozRocket") || !idStr::Icmp(spawnArgs.GetString("type", ""), "velkozRocketUpgrade")){
 		SpawnVelKozImpactEntities(collision.endpos, velocity);
 	}
