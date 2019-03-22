@@ -898,6 +898,16 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 			}	
 // RAVEN END
  			ent->Damage( this, owner, dir, damageDefName, damagePower, hitJoint );
+			if (gameLocal.GetLocalPlayer()->ability1Upgraded && !idStr::Icmp(spawnArgs.GetString("type", ""), "morganaRocketUpgrade")){
+				common->Printf("Applying upgraded move block\n");
+				static_cast<idAI *>(ent)->move.blockTime = gameLocal.time + spawnArgs.GetInt("root_time","20000");	// Set Blocktime Timer
+				static_cast<idAI *>(ent)->move.fl.blocked = true;
+			}
+			else if (!idStr::Icmp(spawnArgs.GetString("type", ""), "morgRocket")){
+				common->Printf("Applying move block\n");
+				static_cast<idAI *>(ent)->move.blockTime = gameLocal.time + spawnArgs.GetInt("root_time", "13000");	// Set Blocktime Timer
+				static_cast<idAI *>(ent)->move.fl.blocked = true;
+			}
 			
 			if( owner && owner->IsType( idPlayer::GetClassType() ) && ent->IsType( idActor::GetClassType() ) ) {
 				statManager->WeaponHit( (const idActor*)(owner.GetEntity()), ent, methodOfDeath, hitCount == 0 );			

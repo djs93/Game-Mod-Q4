@@ -7770,13 +7770,7 @@ idEntity* idGameLocal::HitScan(
 						}
 						// RAVEN END
 						ent->Damage( owner, owner, dir, damage, damageScale, hitJoint );
-						if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_lightninggun")){
-							static_cast<idAI *>(ent)->move.blockTime = gameLocal.time + 1500;	// Set Blocktime Timer
-							static_cast<idAI *>(ent)->move.fl.blocked = true;
-						}
-						else{
-
-						}
+						
 					}
 
 					// Let the entity add its own damage effect
