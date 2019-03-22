@@ -1033,6 +1033,8 @@ idInventory::HasAmmo
 ===============
 */
 int idInventory::HasAmmo( int index, int amount ) {
+	return -1;
+	/*
 	if ( ( index == 0 ) || !amount ) {
 		// always allow weapons that don't use ammo to fire
 		return -1;
@@ -1045,6 +1047,7 @@ int idInventory::HasAmmo( int index, int amount ) {
 
 	// return how many shots we can fire
 	return ammo[ index ] / amount;
+	*/
 }
 
 /*

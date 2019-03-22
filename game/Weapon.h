@@ -172,6 +172,7 @@ public:
 	void				SetFlashlight				( bool on = true );
 	void				Flashlight					( void );
 	void				SetPushVelocity				( const idVec3 &pushVelocity );
+	idVec3				GetPushVelocity				(void);
 	void				Reload						( void );
 	void				OwnerDied					( void );
 	void				BeginAttack					( void );

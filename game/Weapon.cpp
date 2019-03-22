@@ -1769,6 +1769,15 @@ void rvWeapon::SetPushVelocity( const idVec3& _pushVelocity ) {
 
 /*
 ================
+rvWeapon::GetPushVelocity
+================
+*/
+idVec3 rvWeapon::GetPushVelocity(void) {
+	return pushVelocity;
+}
+
+/*
+================
 rvWeapon::Reload
 NOTE: this is only for impulse-triggered reload, auto reload is scripted
 ================

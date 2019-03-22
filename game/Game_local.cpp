@@ -3928,7 +3928,7 @@ escReply_t idGameLocal::HandleESC( idUserInterface **gui ) {
 	}
 #endif
 //RAVEN END
-	common->Printf("In HandleESC, state of isMultiplayer is %s\n", isMultiplayer ? "true":"false");
+	//common->Printf("In HandleESC, state of isMultiplayer is %s\n", isMultiplayer ? "true":"false");
 	if ( isMultiplayer ) {
 		*gui = StartMenu();
 		// we may set the gui back to NULL to hide it
@@ -3939,10 +3939,10 @@ escReply_t idGameLocal::HandleESC( idUserInterface **gui ) {
 		if ( player->HandleESC() ) {
 			return ESC_IGNORE;
 		} else {
-			common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist... what?");
-			common->Printf("Current CursorGUI: %s\n", player->GetCursorGUI() ? player->GetCursorGUI()->Name() : "Does not exist");
-			common->Printf("Current GuiActive: %s\n", player->GuiActive() ? "true" : "false");
-			common->Printf("Current hud name: %s\n", player->hud->Name());
+			//common->Printf("Current focusGUI: %s\n", player->ActiveGui() ? "Exists!" : "Does not exist... what?");
+			//common->Printf("Current CursorGUI: %s\n", player->GetCursorGUI() ? player->GetCursorGUI()->Name() : "Does not exist");
+			//common->Printf("Current GuiActive: %s\n", player->GuiActive() ? "true" : "false");
+			//common->Printf("Current hud name: %s\n", player->hud->Name());
 			return ESC_MAIN;
 		}
 	}
@@ -7584,6 +7584,7 @@ idEntity* idGameLocal::HitScan(
 		int			collisionArea;
 		idVec3		collisionPoint;
 		bool		tracer;
+		bool		shunpoUpgraded;
 		
 		// Calculate the end point of the trace
 		start    = origin;
@@ -7694,7 +7695,28 @@ idEntity* idGameLocal::HitScan(
 
 				// Apply force to the entity that was hit
 				ent->ApplyImpulse( owner, tr.c.id, tr.c.point, -tr.c.normal, &hitscanDict );
-
+				//common->Printf("Does actualHitEnt exist? %s\n", actualHitEnt ? actualHitEnt->GetName() : "No");
+				//Shunpo teleport 
+				if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_pellet") && owner == GetLocalPlayer() && ent->GetPhysics()->GetContents() & CONTENTS_BODY){
+					idVec3 entPos = ent->GetPhysics()->GetOrigin();
+					if (start.x > entPos.x){
+						entPos.x += 30;
+					}
+					else if (start.x < entPos.x){
+						entPos.x -= 30;
+					}
+					if (start.y > entPos.y){
+						entPos.y += 30;
+					}
+					else if (start.y < entPos.y){
+						entPos.y -= 30;
+					}
+					idAngles rotation = owner->GetRenderView()->viewaxis.ToRotation().ToAngles();
+					owner->Teleport(entPos, rotation, ent);
+					if (GetLocalPlayer()->ability1Upgraded){
+						shunpoUpgraded = true;
+					}
+				}
 				// Handle damage to the entity
 				if ( ent->fl.takedamage && !(( tr.c.material != NULL ) && ( tr.c.material->GetSurfaceFlags() & SURF_NODAMAGE )) ) {		
 					const char*	damage;
@@ -7809,9 +7831,19 @@ idEntity* idGameLocal::HitScan(
 			if ( !g_perfTest_weaponNoFX.GetBool() ) {
 				if ( ent->CanPlayImpactEffect( owner, ent ) ) {
 					if ( ent->IsType( idMover::GetClassType( ) ) ) {
-						ent->PlayEffect( GetEffect( hitscanDict, "fx_impact", tr.c.materialType ), collisionPoint, axis, false, vec3_origin, false, EC_IMPACT, hitscanTint );					
+						if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_pellet")){ 
+							ent->PlayEffect(GetEffect(hitscanDict, "fx_impact_alt", tr.c.materialType), collisionPoint, axis, false, vec3_origin, false, EC_IMPACT, hitscanTint); 
+						}
+						else{
+							ent->PlayEffect(GetEffect(hitscanDict, "fx_impact", tr.c.materialType), collisionPoint, axis, false, vec3_origin, false, EC_IMPACT, hitscanTint);
+						}
 					} else {
-						gameLocal.PlayEffect( GetEffect( hitscanDict, "fx_impact", tr.c.materialType ), collisionPoint, axis, false, vec3_origin, false, false, EC_IMPACT, hitscanTint );
+						if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_pellet")){
+							gameLocal.PlayEffect(GetEffect(hitscanDict, "fx_impact_alt", tr.c.materialType), collisionPoint, axis, false, vec3_origin, false, false, EC_IMPACT, hitscanTint);
+						}
+						else{
+							gameLocal.PlayEffect(GetEffect(hitscanDict, "fx_impact", tr.c.materialType), collisionPoint, axis, false, vec3_origin, false, false, EC_IMPACT, hitscanTint);
+						}
 					}
 				}
 			}

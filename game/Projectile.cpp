@@ -250,7 +250,9 @@ void idProjectile::Create( idEntity* _owner, const idVec3 &start, const idVec3 &
 
 	axis = dir.ToMat3();
 
+	common->Printf("Physics object?\n");
  	physicsObj.SetOrigin( start );
+	common->Printf("here?\n");
  	physicsObj.SetAxis( axis );
 
  	physicsObj.GetClipModel()->SetOwner( ignore ? ignore : _owner );

@@ -164,7 +164,7 @@ stateResult_t rvWeaponShotgun::State_Fire( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE)* owner->getCDMult());
-			Attack(false, hitscans, spread, 0, 1.0f * owner->getDmgMult());
+			Attack(false, hitscans, spread, 0, 1.0f * owner->getDmgMult()+0.5f*gameLocal.GetLocalPlayer()->ability1Upgraded);
 			PlayAnim( ANIMCHANNEL_ALL, "fire", 0 );	
 			return SRESULT_STAGE( STAGE_WAIT );
 	
