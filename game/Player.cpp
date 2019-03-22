@@ -10285,7 +10285,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 					   const char *damageDefName, const float damageScale, int location ) {
  	idVec3		kick;
  	int			damage;
- 	int			armorSave;
+ 	int			armorSave = 0;
  	int			knockback;
  	idVec3		damage_from;
  	float		attackerPushScale;
@@ -10335,7 +10335,8 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		attacker = gameLocal.world;
 	}
 
-	if (this == attacker){
+	if (this == attacker && idStr::Icmp(damageDefName, "damage_sorakaDirect") && idStr::Icmp(damageDefName, "damage_sorakaSplash")){
+		common->Printf("returning with damageDefName %s\n",damageDefName);
 		return;
 	}
 
@@ -10364,7 +10365,20 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 
 	// We pass in damageScale, because this function calculates a modified damageScale 
 	// based on g_skill, and we don't want to compensate for skill level twice.
-	CalcDamagePoints( inflictor, attacker, &damageDef->dict, damageScale, location, &damage, &armorSave );
+	if (!idStr::Icmp(damageDefName, "damage_sorakaDirect") || !idStr::Icmp(damageDefName, "damage_sorakaSplash")){
+		common->Printf("setting damage to negative heal amount\n");
+		const idDict *damageDef2 = gameLocal.FindEntityDefDict(damageDefName, false);
+		if (!ability2Upgraded){
+			damage = -damageDef2->GetInt("heal", "25");
+		}
+		else{
+			damage = -damageDef2->GetInt("upgradeheal", "50");
+		}
+	}
+	else{
+		common->Printf("here?\n");
+		CalcDamagePoints(inflictor, attacker, &damageDef->dict, damageScale, location, &damage, &armorSave);
+	}
 
 	//
 	// determine knockback
@@ -10409,9 +10423,12 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 	}
 
 	// give feedback on the player view and audibly when armor is helping
-	inventory.armor -= armorSave;
+	if (armorSave){
+		inventory.armor -= armorSave;
+	}
 
 	if ( g_debugDamage.GetInteger() ) {
+		common->Printf("here?\n");
 		gameLocal.Printf( "client:%i health:%i damage:%i armor:%i\n", 
 			entityNumber, health, damage, armorSave );
 	}
@@ -10489,6 +10506,7 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 			damage = 1;
 		}
 
+		common->Printf("Reducing health by %i\n", damage);
 		int oldHealth = health;
 		health -= damage;
 
@@ -10533,7 +10551,18 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 				lastDmgTime = gameLocal.time;
 			}
 		}
-	} else {
+	}
+	else if (damage < 0){
+		common->Printf("Reducing health by %i\n", damage);
+		int oldHealth = health;
+		if (health - damage>inventory.maxHealth){
+			health = inventory.maxHealth;
+		}
+		else{
+			health -= damage;
+		}
+	}
+	else {
  		// don't accumulate impulses
 		if ( af.IsLoaded() ) {
 			// clear impacts

@@ -2439,6 +2439,14 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 			
 			//reduce the damage
 			damage = 0;
+			if (!idStr::Icmp(damageDefName, "damage_sorakaDirect") || !idStr::Icmp(damageDefName, "damage_sorakaSplash")){
+				if (!gameLocal.GetLocalPlayer()->ability2Upgraded){
+					damage = -damageDef->GetInt("heal", "25");
+				}
+				else{
+					damage = -damageDef->GetInt("upgradeheal", "50");
+				}
+			}
 			noDmgFeedback = true;
 		}		
 
@@ -2552,7 +2560,12 @@ void idActor::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir
 			painType = damageDef->GetString ( "pain" );
 			Pain( inflictor, attacker, damage, dir, location );
 		}
-	} else {
+	} 
+	else if (damage < 0){
+		int oldHealth = health;
+		health -= damage;
+	}
+	else {
 		// don't accumulate knockback
 		/*
 		if ( af.IsLoaded() ) {
