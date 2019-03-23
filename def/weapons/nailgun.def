@@ -270,9 +270,9 @@ entityDef projectile_napalm
 	"angular_friction"			"0"
 	"contact_friction"			"10"
 	"bounce"					".65"
-	"bounce_count"				"3"
+	"bounce_count"				"2"
 	"gravity"					"1.2"
-	"fuse"						"1.2"
+	"fuse"						"2.0"
 	"friendly_impact"			"0"
 								
 	"detonate_on_fuse"			"1"
@@ -326,7 +326,7 @@ entityDef projectile_napalm_alt{
 	"inherit"					"projectile_napalm"
 	"type"						"ziggsUpgraded"
 	"bounce_count"				"5"
-	"fuse"						"2.1"
+	"fuse"						"2.5"
 	"def_impactEntity"			"impact_napalm_projectile_alt"
 }
 

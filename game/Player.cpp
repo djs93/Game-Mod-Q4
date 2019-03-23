@@ -476,6 +476,7 @@ void idInventory::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt( secretAreasDiscovered );
 
 	savefile->WriteSyncId();
+
 }
 
 /*
@@ -2375,6 +2376,13 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	savefile->WriteBool(duskbladeActive);
 	savefile->WriteBool(warmogsActive);
 	savefile->WriteBool(runaansActive);
+	savefile->WriteFloat(buyMenuCash);
+	savefile->WriteInt(level);
+	savefile->WriteInt(exp);
+	savefile->WriteInt(nextLevelExp);
+	savefile->WriteInt(upgradePoints);
+	savefile->WriteBool(ability1Upgraded);
+	savefile->WriteBool(ability2Upgraded);
 }
 
 /*
@@ -2684,6 +2692,13 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 	savefile->ReadBool(duskbladeActive);
 	savefile->ReadBool(warmogsActive);
 	savefile->ReadBool(runaansActive);
+	savefile->ReadFloat(buyMenuCash);
+	savefile->ReadInt(level);
+	savefile->ReadInt(exp);
+	savefile->ReadInt(nextLevelExp);
+	savefile->ReadInt(upgradePoints);
+	savefile->ReadBool(ability1Upgraded);
+	savefile->ReadBool(ability2Upgraded);
 }
 
 /*
@@ -6724,6 +6739,9 @@ void idPlayer::UpdateFocus( void ) {
 
 	// No focus during cinimatics
 	if ( gameLocal.inCinematic ) {
+		return;
+	}
+	if (hud == buygui||hud==selectionGui){
 		return;
 	}
 
@@ -14433,6 +14451,11 @@ void idPlayer::SetClass(const char* className){
 	if (!idStr::Icmp(className, "tank")){
 		GiveItem("weapon_blaster");
 		GiveItem("weapon_machinegun");
+		//tanks are pretty weak, buff their base stats a bit
+		//not going to lie, this is like the only balance change in this whole mod
+		//but balance wasn't one of my deliverables (I guess it's not one of Riot's either...)
+		inventory.maxarmor += 50;
+		inventory.maxHealth += 50;
 	}
 	else if (!idStr::Icmp(className, "assassin")){
 		GiveItem("weapon_shotgun");

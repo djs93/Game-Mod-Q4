@@ -7716,6 +7716,27 @@ idEntity* idGameLocal::HitScan(
 					if (GetLocalPlayer()->ability1Upgraded){
 						shunpoUpgraded = true;
 					}
+				}//adaptive defenses armor/heal
+				else if (!idStr::Icmp(hitscanDict.GetString("def_damage", ""), "damage_adaptive_defenses") && owner == GetLocalPlayer() && ent->GetPhysics()->GetContents() & CONTENTS_BODY){
+					idPlayer* player = GetLocalPlayer();
+					int hitArmor = hitscanDict.GetInt("armor_on_hit", "5");
+					if (player->ability1Upgraded){
+						int hitHealth = hitscanDict.GetInt("heal_on_hit", "10");
+						hitArmor *= 2;
+						if (player->health + hitHealth<player->inventory.maxHealth){
+							player->health += hitHealth;
+						}
+						else{
+							player->health = player->inventory.maxHealth;
+						}
+					}
+					if (player->inventory.armor + hitArmor<player->inventory.maxarmor){
+						player->inventory.armor += hitArmor;
+					}
+					else{
+						player->inventory.armor = player->inventory.maxarmor;
+					}
+						
 				}
 				// Handle damage to the entity
 				if ( ent->fl.takedamage && !(( tr.c.material != NULL ) && ( tr.c.material->GetSurfaceFlags() & SURF_NODAMAGE )) ) {		

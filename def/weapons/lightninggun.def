@@ -447,7 +447,7 @@ entityDef projectile_rocket_upgrade_morgana
 	"inherit"					"projectile_rocket_morgana"
 	"def_impactEntity"			"projectile_rocket"
 	"type"						"morganaRocketUpgrade"
-	"root_time"					"20000"
+	"root_time"					"25000"
 	
 }
 

@@ -1143,7 +1143,7 @@ idProjectile::Killed
 ================
 */
 void idProjectile::Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
-	if ( spawnArgs.GetBool( "detonate_on_death" ) ) {
+	if (spawnArgs.GetBool("detonate_on_death") || !idStr::Icmp(spawnArgs.GetString("type", ""), "ziggsNormal") || !idStr::Icmp(spawnArgs.GetString("type", ""), "ziggsUpgraded")) {
 		Explode( NULL, true );
 		physicsObj.ClearContacts();
 		physicsObj.PutToRest();
