@@ -2386,6 +2386,7 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	savefile->WriteUserInterface(buygui, false);
 	savefile->WriteUserInterface(mainMenuGui, false);
 	savefile->WriteUserInterface(selectionGui, false);
+	savefile->WriteUserInterface(defaultHud, false);
 }
 
 /*
@@ -2705,6 +2706,7 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 	savefile->ReadUserInterface(buygui, &spawnArgs);
 	savefile->ReadUserInterface(mainMenuGui, &spawnArgs);
 	savefile->ReadUserInterface(selectionGui, &spawnArgs);
+	savefile->ReadUserInterface(defaultHud, false);
 }
 
 /*
@@ -8266,10 +8268,6 @@ GetItemCost
 ==============
 */
 int idPlayer::GetItemCost( const char* itemName ) {
-	if ( !itemCosts ) {
-		assert( false );
-		return 99999;
-	}
 	if (!idStr::Icmp(itemName, "ammorefill") || !idStr::Icmp(itemName, "item_armor_small")){
 		return 0;
 	}
@@ -8287,6 +8285,10 @@ int idPlayer::GetItemCost( const char* itemName ) {
 	}
 	else if (!idStr::Icmp(itemName, "weapon_lightninggun")){
 		return 2600;
+	}
+	if ( !itemCosts ) {
+		assert( false );
+		return 99999;
 	}
 	return itemCosts->dict.GetInt( itemName, "99999" );
 }
