@@ -2383,6 +2383,9 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt(upgradePoints);
 	savefile->WriteBool(ability1Upgraded);
 	savefile->WriteBool(ability2Upgraded);
+	savefile->WriteUserInterface(buygui, false);
+	savefile->WriteUserInterface(mainMenuGui, false);
+	savefile->WriteUserInterface(selectionGui, false);
 }
 
 /*
@@ -2699,6 +2702,9 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt(upgradePoints);
 	savefile->ReadBool(ability1Upgraded);
 	savefile->ReadBool(ability2Upgraded);
+	savefile->ReadUserInterface(buygui, &spawnArgs);
+	savefile->ReadUserInterface(mainMenuGui, &spawnArgs);
+	savefile->ReadUserInterface(selectionGui, &spawnArgs);
 }
 
 /*
@@ -8266,6 +8272,21 @@ int idPlayer::GetItemCost( const char* itemName ) {
 	}
 	if (!idStr::Icmp(itemName, "ammorefill") || !idStr::Icmp(itemName, "item_armor_small")){
 		return 0;
+	}
+	if (!idStr::Icmp(itemName, "weapon_shotgun")){
+		return 3600;
+	}
+	else if (!idStr::Icmp(itemName, "weapon_hyperblaster")){
+		return 2300;
+	}
+	else if (!idStr::Icmp(itemName, "weapon_nailgun")){
+		return 2900;
+	}
+	else if (!idStr::Icmp(itemName, "weapon_grenadelauncher")){
+		return 2850;
+	}
+	else if (!idStr::Icmp(itemName, "weapon_lightninggun")){
+		return 2600;
 	}
 	return itemCosts->dict.GetInt( itemName, "99999" );
 }
