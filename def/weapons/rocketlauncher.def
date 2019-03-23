@@ -328,7 +328,7 @@ entityDef weaponmod_rocketlauncher_homing
 entityDef projectile_rocket_kaisa
 {
 	"spawnclass"				"idProjectile"
-	"size"						"7 7 7"
+	"size"						"11 11 11"
 	"cone"						"2"
 	"noshadows"					"1"
 	"clipmask_largeshot"		"1"
@@ -338,7 +338,7 @@ entityDef projectile_rocket_kaisa
 	//"def_splash_damage"			"damage_rocketSplash"
 																											
 	"speed"						"900"
-	"fuse"						"2.5"
+	"fuse"						"4.5"
 	"push"						"48000"
 	
 							
