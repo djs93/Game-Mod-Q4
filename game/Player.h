@@ -835,6 +835,7 @@ public:
 	idUserInterface*		selectionGui;
 
 	void					SetClass(const char* className);
+	void					SetSpeed(float newspeed);
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

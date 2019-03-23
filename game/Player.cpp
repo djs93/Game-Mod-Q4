@@ -14463,4 +14463,9 @@ void idPlayer::SetClass(const char* className){
 	}
 }
 
+void idPlayer::SetSpeed(float newspeed){
+	physicsObj.SetSpeed(newspeed, pm_crouchspeed.GetFloat());
+	UpdateViewAngles();
+}
+
 // RITUAL END

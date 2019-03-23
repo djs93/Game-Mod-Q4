@@ -118,6 +118,7 @@ public:	// common physics interface
 // RAVEN END
 
 	void					SetClipModelNoLink( idClipModel *clip );
+	float					playerSpeed;
 
 private:
 	// player physics state
@@ -138,7 +139,7 @@ private:
 	// run-time variables
 	int						framemsec;
 	float					frametime;
-	float					playerSpeed;
+
 	idVec3					viewForward;
 	idVec3					viewRight;
 
